@@ -1,19 +1,65 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getallPostReportApi } from "../../api/reportPost";
+import privateAPI from "../../api/privateApi";
+import Apiconfig from "../../api/Apiconfig";
+// import { getalluservalue } from "../../api/reportPost";
 
 // get all post report
-export const getAllPostReportAction = createAsyncThunk(
-  "industrialUser/getAllPostReportAction",
-  async (pageDetails, { rejectWithValue }) => {
-    try {
-      const response = await getallPostReportApi(pageDetails);
-      return response.combinedDetailsList;
-    } catch (error) {
-      console.log("redux", error.response);
-      return rejectWithValue(error.response?.data || error.message);
-    }
+// export const getAllPostReportAction = createAsyncThunk(
+//   "industrialUser/getAllPostReportAction",
+//   async (pageDetails, { rejectWithValue }) => {
+//     try {
+//       const response = await getallPostReportApi(pageDetails);
+//       return response.combinedDetailsList;
+//     } catch (error) {
+//       console.log("redux", error.response);
+//       return rejectWithValue(error.response?.data || error.message);
+//     }
+//   }
+// );
+
+export const getAllPostReportAction  = createAsyncThunk("industrialUser/getAllPostReportAction",async(pageDetails,{rejectWithValue}) =>{
+
+  try {
+    const response = await getallPostReportApi(pageDetails);
+    return response.combinedDetailsList;
+    
+  } catch (error) {
+    return rejectWithValue(error.response?.data || error.message);
+    
   }
+}
 );
+
+
+// totalreport showing integration
+
+export const getTotalReportUsersCount = createAsyncThunk("industrialUser/getTotalUsersCount", async(_ , {rejectWithValue}) => {
+  try {
+    const response = await privateAPI.get(Apiconfig.getreportscount)
+    return response.data
+    
+  } catch (error) {
+    return rejectWithValue(error.response?.data || error.message);
+    
+  }
+
+}
+);
+
+
+// export const getUserAction  = createAsyncThunk("industrialUser/getUserAction",async(pageDetails,{rejectWithValue}) =>{
+
+//   try {
+//     const response = await getalluservalue(pageDetails);
+//     console.log(response)
+    
+//   } catch (error) {
+//     return rejectWithValue(error.response?.data || error.message);
+    
+//   }
+// }
+// );
 
 export const reportPostsSlice = createSlice({
   name: "reportPost",
@@ -22,7 +68,11 @@ export const reportPostsSlice = createSlice({
     getAllpostReportLoadingErrorMsg: null,
     getAllPostReportList: [],
     reportPostFiles: [],
-    reportPostUsers:[]
+    reportPostUsers:[],
+    getAllTotalReportLoadingStatus : "idle",
+    getAllTotalReportLoadingErrorMsg : null,
+    getAllTotalReportList : []
+
   },
   reducers: {
     setReportPostFiles: (state, action) => {
@@ -45,7 +95,19 @@ export const reportPostsSlice = createSlice({
       .addCase(getAllPostReportAction.rejected, (state, action) => {
         state.getAllpostReportLoadingStatus = "failed";
         state.getAllpostReportLoadingErrorMsg = action.payload;
-      });
+      })
+      .addCase(getTotalReportUsersCount.pending, (state) => {
+        state.getAllTotalReportLoadingStatus = "loading";
+        state.getAllTotalReportLoadingErrorMsg = null;
+      })
+      .addCase(getTotalReportUsersCount.fulfilled, (state, action) => {
+        state.getAllTotalReportLoadingStatus = "succeeded";
+        state.getAllTotalReportList = action.payload;
+      })
+      .addCase(getTotalReportUsersCount.rejected, (state, action) => {
+        state.getAllTotalReportLoadingStatus = "failed";
+        state.getAllTotalReportLoadingErrorMsg = action.payload;
+      })
   },
 });
 
@@ -54,3 +116,7 @@ export default reportPostsSlice.reducer;
 
 // Exporting the action creator
 export const { setReportPostFiles,setRepotUserDetails } = reportPostsSlice.actions;
+
+// export the totalreportlist
+
+export const totalreportvalue = (state) => state.reportPost.getAllTotalReportList.data

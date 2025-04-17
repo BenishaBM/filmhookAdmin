@@ -4,4 +4,4 @@ const publicAPI = axios.create({
     baseURL:"https://filmhook.annularprojects.com/filmhook-0.1"
 });
 
-export default publicAPI
+export default publicAPI;

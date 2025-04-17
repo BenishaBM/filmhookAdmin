@@ -1,23 +1,214 @@
+// import React, { useState, useEffect } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { getUnverifiedIndustrialUserListAction } from "../../redux/slices/notVerifiedIndustrialUserSlice";
+// import {
+//   ArrowDownTrayIcon,
+//   MagnifyingGlassIcon,
+// } from "@heroicons/react/24/outline";
+// import Pagination from "../../component/Pagination";
+// import { Link } from "react-router-dom";
+// import {
+//   Card,
+//   CardFooter,
+//   CardHeader,
+//   Typography,
+//   Button,
+//   CardBody,
+//   Tooltip,
+//   Input,
+//   Switch,
+//   IconButton,
+// } from "@material-tailwind/react";
+
+// const NotVerifiedUserIndustrialList = () => {
+//   const {
+//     unVerifiedIndustrialUserList,
+//     getListLoadingStatus,
+//     getListErrorMessage,
+
+//   } = useSelector((state) => state.industrialUser);
+//   const dispatch = useDispatch();
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const [searchName, setSearchName] = useState("");
+
+//   useEffect(() => {
+//     const pageDetails = {
+//       pageNo: currentPage,
+//       pageSize: 10,
+//     };
+//     dispatch(getUnverifiedIndustrialUserListAction(pageDetails));
+//   }, [dispatch, currentPage]);
+
+//   const handlePageClicked = (page) => {
+//     setCurrentPage(page);
+//   };
+//   const fliterdIndustrialUserList = unVerifiedIndustrialUserList.filter(
+//     (user) => user.name.toLowerCase().includes(searchName.toLocaleLowerCase())
+//   );
+
+//   const recordsPerPage = 10;
+//   const totalPages = Math.ceil(
+//     fliterdIndustrialUserList.length / recordsPerPage
+//   );
+//   const lastIndex = currentPage * recordsPerPage;
+//   const firstIndex = lastIndex - recordsPerPage;
+//   const records = fliterdIndustrialUserList.slice(firstIndex, lastIndex);
+
+//   const handleSearch = (e) => {
+//     console.log("name", e.target.value);
+//     setSearchName(e.target.value);
+//   };
+
+//   const renderPagination = () => {
+//     const pageNumbers = [];
+//     if (totalPages <= 5) {
+//       for (let i = 1; i <= totalPages; i++) {
+//         pageNumbers.push(i);
+//       }
+//     } else {
+//       if (currentPage <= 3) {
+//         pageNumbers.push(1, 2, 3, 4, "...", totalPages);
+//       } else if (currentPage > totalPages - 3) {
+//         pageNumbers.push(
+//           1,
+//           "...",
+//           totalPages - 3,
+//           totalPages - 2,
+//           totalPages - 1,
+//           totalPages
+//         );
+//       } else {
+//         pageNumbers.push(
+//           1,
+//           "...",
+//           currentPage - 1,
+//           currentPage,
+//           currentPage + 1,
+//           "...",
+//           totalPages
+//         );
+//       }
+//     }
+//     return pageNumbers;
+//   };
+
+//   const TABLE_HEAD = ["S.No", "Name", "Details"];
+
+//   return (
+//     <div className="flex items-center justify-center h-full w-full">
+//       <div className="h-full w-[95%]">
+//         <CardHeader floated={false} shadow={false} className="rounded-none">
+//           <div className="mb-4 flex flex-col justify-end gap-8 md:flex-row md:items-center">
+//             <div className="flex w-full shrink-0 gap-2 md:w-max mt-2">
+//               <div className="w-full md:w-72">
+//                 <Input
+//                   label="Search"
+//                   onChange={handleSearch}
+//                   icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+//                 />
+//               </div>
+//             </div>
+//           </div>
+//         </CardHeader>
+//         <CardBody className="overflow-y-auto px-0">
+//           {/* {subadminListLoadingStatus === "loading" && <div>Loading...</div>} */}
+//           {getListErrorMessage && <div>Error While Loading Data</div>}
+//           {records && (
+//             <table className="w-full min-w-max table-auto text-left">
+//               <thead>
+//                 <tr>
+//                   {TABLE_HEAD.map((head, index) => (
+//                     <th
+//                       key={index}
+//                       className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+//                     >
+//                       <Typography
+//                         variant="small"
+//                         color="blue-gray"
+//                         className="font-normal leading-none opacity-70"
+//                       >
+//                         {head}
+//                       </Typography>
+//                     </th>
+//                   ))}
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {records.map((item, index) => {
+//                   const isLast = index === records.length - 1;
+//                   const classes = isLast
+//                     ? "px-4 py-[1rem]"
+//                     : "px-4 py-[0.05rem] border-b border-blue-gray-50";
+//                   return (
+//                     <tr key={index} className="even:bg-blue-gray-50/50">
+//                       <td className={classes}>
+//                         <div className="flex items-center gap-3">
+//                           <Typography
+//                             variant="small"
+//                             color="blue-gray"
+//                             className="font-bold"
+//                           >
+//                             {firstIndex + index + 1} 
+//                           </Typography>
+//                         </div>
+//                       </td>
+//                       <td className={classes}>
+//                         <Typography
+//                           variant="small"
+//                           color="blue-gray"
+//                           className="font-normal"
+//                         >
+//                           {item.name}
+//                         </Typography>
+//                       </td>
+//                       <td className={classes}>
+//                         <Link
+//                           to={`/layout/unverified_userdetails/${item.userId}`}
+//                           className=" text-blue-600"
+//                         >
+//                           View
+//                         </Link>
+//                       </td>
+//                     </tr>
+//                   );
+//                 })}
+//               </tbody>
+//             </table>
+//           )}
+//         </CardBody>
+
+//         <Pagination
+//           pagenumbers={renderPagination}
+//           currentPage={currentPage}
+//           totalPages={totalPages}
+//           handlePageClicked={handlePageClicked}
+//         />
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default NotVerifiedUserIndustrialList;
+
+
+
+
+
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUnverifiedIndustrialUserListAction } from "../../redux/slices/notVerifiedIndustrialUserSlice";
 import {
-  ArrowDownTrayIcon,
   MagnifyingGlassIcon,
+  EyeIcon
 } from "@heroicons/react/24/outline";
 import Pagination from "../../component/Pagination";
 import { Link } from "react-router-dom";
 import {
   Card,
-  CardFooter,
   CardHeader,
   Typography,
-  Button,
   CardBody,
-  Tooltip,
   Input,
-  Switch,
-  IconButton,
 } from "@material-tailwind/react";
 
 const NotVerifiedUserIndustrialList = () => {
@@ -25,7 +216,6 @@ const NotVerifiedUserIndustrialList = () => {
     unVerifiedIndustrialUserList,
     getListLoadingStatus,
     getListErrorMessage,
-   
   } = useSelector((state) => state.industrialUser);
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +233,7 @@ const NotVerifiedUserIndustrialList = () => {
     setCurrentPage(page);
   };
   const fliterdIndustrialUserList = unVerifiedIndustrialUserList.filter(
-    (user) => user.name.toLowerCase().includes(searchName.toLocaleLowerCase())
+    (user) => user.name.toLowerCase().includes(searchName.toLowerCase())
   );
 
   const recordsPerPage = 10;
@@ -55,7 +245,6 @@ const NotVerifiedUserIndustrialList = () => {
   const records = fliterdIndustrialUserList.slice(firstIndex, lastIndex);
 
   const handleSearch = (e) => {
-    console.log("name", e.target.value);
     setSearchName(e.target.value);
   };
 
@@ -95,37 +284,32 @@ const NotVerifiedUserIndustrialList = () => {
   const TABLE_HEAD = ["S.No", "Name", "Details"];
 
   return (
-    <div className="flex items-center justify-center h-full w-full">
+    <div className="flex items-center justify-center h-full w-full bg-blue-50">
       <div className="h-full w-[95%]">
-        <CardHeader floated={false} shadow={false} className="rounded-none">
-          <div className="mb-4 flex flex-col justify-end gap-8 md:flex-row md:items-center">
-            <div className="flex w-full shrink-0 gap-2 md:w-max mt-2">
-              <div className="w-full md:w-72">
-                <Input
-                  label="Search"
-                  onChange={handleSearch}
-                  icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                />
-              </div>
-            </div>
-          </div>
-        </CardHeader>
+        <Typography
+          variant="h1"
+          className="text-4xl font-bold text-blue-800 text-center my-6"
+        >
+          Unverified Industrial Users
+        </Typography>
+
+
         <CardBody className="overflow-y-auto px-0">
-          {/* {subadminListLoadingStatus === "loading" && <div>Loading...</div>} */}
-          {getListErrorMessage && <div>Error While Loading Data</div>}
+          {getListLoadingStatus === "loading" && <div className="text-center py-4">Loading...</div>}
+          {getListErrorMessage && <div className="text-center text-red-500 py-4">Error While Loading Data</div>}
           {records && (
             <table className="w-full min-w-max table-auto text-left">
               <thead>
-                <tr>
+                <tr className="bg-blue-500">
                   {TABLE_HEAD.map((head, index) => (
                     <th
                       key={index}
-                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                      className="p-4"
                     >
                       <Typography
                         variant="small"
-                        color="blue-gray"
-                        className="font-normal leading-none opacity-70"
+                        color="white"
+                        className="font-semibold"
                       >
                         {head}
                       </Typography>
@@ -137,20 +321,18 @@ const NotVerifiedUserIndustrialList = () => {
                 {records.map((item, index) => {
                   const isLast = index === records.length - 1;
                   const classes = isLast
-                    ? "px-4 py-[1rem]"
-                    : "px-4 py-[0.05rem] border-b border-blue-gray-50";
+                    ? "px-4 py-3"
+                    : "px-4 py-3 border-b border-blue-gray-50";
                   return (
                     <tr key={index} className="even:bg-blue-gray-50/50">
                       <td className={classes}>
-                        <div className="flex items-center gap-3">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-bold"
-                          >
-                            {firstIndex + index + 1} 
-                          </Typography>
-                        </div>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-bold"
+                        >
+                          {firstIndex + index + 1}
+                        </Typography>
                       </td>
                       <td className={classes}>
                         <Typography
@@ -161,12 +343,13 @@ const NotVerifiedUserIndustrialList = () => {
                           {item.name}
                         </Typography>
                       </td>
-                      <td className={classes}>
+                      <td className={classes} >
                         <Link
                           to={`/layout/unverified_userdetails/${item.userId}`}
-                          className=" text-blue-600"
+                          className="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded-md w-max"
                         >
-                          View
+                          <EyeIcon className="h-5 w-5" />
+                          <span>View Details</span>
                         </Link>
                       </td>
                     </tr>
@@ -177,15 +360,28 @@ const NotVerifiedUserIndustrialList = () => {
           )}
         </CardBody>
 
-        <Pagination
-          pagenumbers={renderPagination}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          handlePageClicked={handlePageClicked}
-        />
+        {totalPages > 1 && (
+          <div className="my-4">
+            <Pagination
+              pagenumbers={renderPagination}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              handlePageClicked={handlePageClicked}
+            />
+          </div>
+        )}
+
       </div>
     </div>
   );
 };
 
 export default NotVerifiedUserIndustrialList;
+
+
+
+
+
+
+
+

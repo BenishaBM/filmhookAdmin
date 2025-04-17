@@ -8,10 +8,29 @@ export const getallPostReportApi = async (pageDetails) =>{
     try{
       const response = await privateAPI.post(Apiconfig.allpostreport,pageDetails);
     //   console.log("getall report",response.data);
+    
+
       return response.data;
     }catch(error){
       console.log("error: ", error.response);
       throw Error(error.response);
     }
   }
+
+
+  //get usermanagement
+
+  // export const getalluservalue = async (pageDetails) =>{
+  //   try {
+  //     const response = await privateAPI.post(.getAllUsers,pageDetails);
+  //   //   console.log("getall report",response.data);
+    
+
+  //     return response.data;
+      
+  //   }catch(error){
+  //     console.log("error: ", error.response);
+  //     throw Error(error.response);
+  //   }
+  // }
   

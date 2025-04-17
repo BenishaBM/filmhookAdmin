@@ -14,13 +14,15 @@ import UnverfiedUserDetails from "./features/industiralUser/UnverfiedUserDetails
 
 import { useSelector } from "react-redux";
 import { getUserType } from "./redux/slices/loginSlice";
+import UserList from "./features/industiralUser/UserList";
+import Dashboardpie from "./features/Dashboard.jsx/Dashboardpie";
 
 const App = () => {
   // const { userType, loading } = useUser();
 
   const userType = useSelector(getUserType)
 
- 
+
 
   return (
     <Routes>
@@ -103,7 +105,22 @@ const App = () => {
             </ProtectedPage>
           }
         />
+
+        <Route path="user_list" element={
+          <ProtectedPage>
+            <UserList />
+          </ProtectedPage>
+        } />
+
+        <Route path="dashboard" element={
+          <ProtectedPage>
+            <Dashboardpie> </Dashboardpie>
+
+          </ProtectedPage>
+        } />
+
       </Route>
+
     </Routes>
   );
 };
