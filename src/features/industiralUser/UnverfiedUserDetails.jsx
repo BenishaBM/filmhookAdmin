@@ -372,17 +372,33 @@ const UnverfiedUserDetails = () => {
   const handlevideoDialog = () => {
     setFileType("video");
     setopenDialogBox(!openDialogBox);
-  
+
     const videoCardFile = unverifiedUserFiles.filter(
       (file) => file.category === "Video"
     );
-  
+
     const videoCardFilePath = videoCardFile.map(file => file.filePath);
-  
+
     seturls(videoCardFilePath);
     console.log("Setting urls to:", videoCardFilePath); // correct logging
   };
-  
+
+
+  // oneminute video dialogue
+  const handleOneminutevideoDialog = () => {
+    setFileType("oneminutevideo");
+    setopenDialogBox(!openDialogBox);
+
+    const oneminutevideoCardFile = unverifiedUserFiles.filter(
+      (file) => file.category === "oneMinuteVideo"
+    );
+
+    const oneminutevideoCardFilePath = oneminutevideoCardFile.map(file => file.filePath);
+
+    seturls(oneminutevideoCardFilePath);
+    console.log("Setting urls to:", oneminutevideoCardFilePath); // correct logging
+  };
+
 
   const handelRejectProfile = async () => {
     const details = {
@@ -427,7 +443,7 @@ const UnverfiedUserDetails = () => {
 
               {/* static image changes is required */}
               <img src="https://media.istockphoto.com/id/1225585631/photo/5g-communications-tower-with-man-using-mobile-phone.jpg?s=612x612&w=0&k=20&c=3guCR-COMpYY2OMSYMch__63i2ywVH2YNa-Bs-pAhNQ=" alt="onlineimg"
-              className="w-32 h-32 rounded-full border-4 border-white object-cover bg-white shadow-lg" />
+                className="w-32 h-32 rounded-full border-4 border-white object-cover bg-white shadow-lg" />
               <div className="absolute bottom-2 right-2 w-5 h-5 rounded-full bg-yellow-400 border-2 border-white"></div>
             </div>
             <div className="mt-4 md:mt-0 md:ml-6 text-center md:text-left">
@@ -475,6 +491,20 @@ const UnverfiedUserDetails = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
             Documents
+          </button>
+
+
+          {/* i am adding oneminute video to this tab */}
+
+
+          <button
+            className={`px-6 py-4 flex items-center ${activeTab === 'oneminutevideo' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'}`}
+            onClick={() => setActiveTab('oneminutevideo')}
+          >
+            <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+            One-Minute Video
           </button>
         </div>
 
@@ -536,6 +566,32 @@ const UnverfiedUserDetails = () => {
               </div>
             </div>
           )}
+
+          {/* oneminute-video condition  */}
+          {activeTab === 'oneminutevideo' && (
+            <div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div
+                  onClick={handleOneminutevideoDialog}
+                  className="bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-blue-50 hover:border-blue-200 transition-colors duration-200 flex items-center cursor-pointer"
+                >
+                  <div className="w-12 h-12 flex items-center justify-center bg-purple-100 rounded-lg mr-4">
+                  <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-800">One-Minute Video</h3>
+                    <p className="text-sm text-gray-500">View Video Demonstration </p>
+                  </div>
+                </div>
+
+
+
+
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -555,6 +611,15 @@ const UnverfiedUserDetails = () => {
           urls={urls}
         />
       )}
+
+      {fileType === "oneminutevideo" && (
+        <DialogBox
+          openDialogBox={openDialogBox}
+          setopenDialogBox={setopenDialogBox}
+          urls={urls}
+        />
+      )}   
+      {/* both video and oneminute video popup are in videobox components */}
 
       {/* Review Dialog */}
       <div className={`fixed inset-0 z-50 overflow-y-auto ${openReview ? 'flex' : 'hidden'} items-center justify-center`}>
