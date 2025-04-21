@@ -13,7 +13,7 @@ export const getUnVerifiedIndustrialUserListAPI = async (pageDetails) => {
     const data = await response.data;
     return data.data;
   } catch (error) {
-    console.log("error unverified list ", error);
+    // console.log("error unverified list ", error);
     throw Error(error.response.data.message);
   }
 };
