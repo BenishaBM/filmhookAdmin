@@ -517,7 +517,7 @@ import { dashboardval, getAllDashboardValue } from '../../redux/slices/Dashboard
 import { getIndustryUserAction, getPublicUserAction, getUserAction, Industryuservalues, publicuservalues, uservalues } from '../../redux/slices/UsermanagementSlice';
 import { getTotalReportUsersCount, totalreportvalue } from '../../redux/slices/reportPostsSlice';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { paymentcount, getAllTotalUsers, paymentTotalCount, totalpayment, paymentsuccess, successdata } from '../../redux/slices/paymentslice';
+import { paymentcount, getAllTotalUsers, paymentTotalCount, totalpayment, paymentsuccess, successdata, paymentfailed, paymentexpired, paymentpending, faildata, expiredata, pendingdata } from '../../redux/slices/paymentslice';
 
 const Dashboardpie = () => {
   const [showUserList, setShowUserList] = useState(false);
@@ -533,7 +533,10 @@ const Dashboardpie = () => {
   const totalreportusers = useSelector(totalreportvalue);
   const [payment, setPaymentData] = useState([]);
   const successdatas = useSelector(successdata); // payment popup apivalues for successdatas
-  const totalpaymentuser = useSelector(totalpayment); // payment popup apivalues for totalusers
+  const totalpaymentuser = useSelector(totalpayment);// payment popup apivalues for totalusers
+  const faileddatas = useSelector(faildata) // payment popup api values for failedusers
+  const expireddatas = useSelector(expiredata) // expireddatas values
+  const pendingdatas = useSelector(pendingdata) // pendingdatas values
 
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(4);
@@ -607,11 +610,11 @@ const Dashboardpie = () => {
 
 
   useEffect(() => {
-    if (showPaymentList && selecteddata ) {
+    if (showPaymentList && selecteddata) {
       console.log(currentPage)
       loadtotalusers(selecteddata)
     }
-  }, [currentPage, pageSize,selecteddata,  showPaymentList]);
+  }, [currentPage, pageSize, selecteddata, showPaymentList]);
 
   const loadUsers = (userType) => {
     const pageDetails = {
@@ -643,7 +646,7 @@ const Dashboardpie = () => {
   // const loadtotalusers = (data) => {
   //   //console.log("data is triggered")
   //   //console.log(data)
-    
+
   //   const pageDetails = {
   //     pageNo: currentPage,
   //     pageSize: pageSize,
@@ -668,13 +671,13 @@ const Dashboardpie = () => {
   //   if (data.name === "TOTAL") {
   //     console.log(selecteddata)
   //     dispatch(getAllTotalUsers(pageDetails))
-      
+
   //     // console.log("is triggered")
   //   } 
   //   if( data.name == "SUCCESS"){
   //     console.log(selecteddata)
   //     dispatch(paymentsuccess(status))
-      
+
   //   }
 
   // }
@@ -683,25 +686,53 @@ const Dashboardpie = () => {
 
   const loadtotalusers = (data) => {
     console.log(data); // this is correct and up-to-date
-  
+
     const pageDetails = {
       pageNo: currentPage,
       pageSize: pageSize,
     };
-  
-    const status = {
+
+    const statussuccess = {
       status: "SUCCESS",
     };
-  
+    const statusfailed = {
+      status: "FAILED"
+    };
+    const statusexpired = {
+      status: "EXPIRED"
+    };
+    const statuspending = {
+      status: "PENDING"
+    };
+
+
+
+
+    // if (data.name === "TOTAL") {
+    //   dispatch(getAllTotalUsers(pageDetails));
+    // } 
+
+    // if (data.name === "SUCCESS") {
+    //   dispatch(paymentsuccess(status));
+    // }
+
     if (data.name === "TOTAL") {
       dispatch(getAllTotalUsers(pageDetails));
-    } 
-  
-    if (data.name === "SUCCESS") {
-      dispatch(paymentsuccess(status));
+    } else if (data.name === "SUCCESS") {
+      dispatch(paymentsuccess(statussuccess));
+
+    } else if (data.name === "FAILED") {
+      dispatch(paymentfailed(statusfailed));
+
+    } else if (data.name === "EXPIRED") {
+      dispatch(paymentexpired(statusexpired));
+
+    } else if (data.name === "PENDING") {
+      dispatch(paymentpending(statuspending));
+
     }
   };
-  
+
 
 
 
@@ -734,12 +765,13 @@ const Dashboardpie = () => {
 
 
   const handleBarClick = (data) => {
+    
     setselecteddata(data); // updates the state, but it's async
     console.log(selecteddata);     // log the actual clicked data
     setShowPaymentList(true);
     loadtotalusers(data);  // pass directly instead of using selecteddata
   };
-  
+
 
 
 
@@ -1065,6 +1097,7 @@ const Dashboardpie = () => {
 
 
   const SuccessListModal = ({ onClose }) => {
+    
     const sdata = Array.isArray(successdatas) ? successdatas :
       (successdatas && Array.isArray(successdatas.data) ? successdatas.data : []);
 
@@ -1098,7 +1131,326 @@ const Dashboardpie = () => {
                 {sdata.length > 0 ? (
                   sdata.map((datas, index) => (
                     <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                      <td className="py-2 px-4 border">{index+1}</td>
+                      <td className="py-2 px-4 border">{index + 1}</td>
+                      <td className="py-2 px-4 border">{datas.txnid || datas.txnid}</td>
+                      <td className="py-2 px-4 border">{datas.firstname}</td>
+                      <td className="py-2 px-4 border">
+                        <span className={`px-2 py-1 rounded-full text-xs ${datas.status === 'SUCCESS' ? 'bg-green-100 text-green-800' :
+                          datas.status === 'FAILED' ? 'bg-red-100 text-red-800' :
+                            datas.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                              datas.status === 'EXPIRED' ? 'bg-gray-100 text-gray-800' :
+                                'bg-blue-100 text-blue-800'
+                          }`}>
+                          {datas.amount}
+                        </span>
+
+                      </td>
+                      <td className="py-2 px-4 border">{datas.email || datas.email}</td>
+                      <td className="py-2 px-4 border">{datas.productinfo || datas.productinfo}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="py-4 text-center">No payment data available</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className='mt-3'>
+
+          </div>
+
+          {/* <div className="mt-4 flex justify-center">
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                // Show pages around current page
+                const pageNumber = currentPage - 2 + i;
+                if (pageNumber > 0 && pageNumber <= totalPages) {
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(pageNumber)}
+                      className={`px-3 py-1 rounded ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'
+                        }`}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                }
+                return null;
+              })}
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div> */}
+        </div>
+      </div>
+    );
+  };
+
+
+
+  const FailedListModal = ({ onClose }) => {
+    const fdata = Array.isArray(faileddatas) ? faileddatas :
+      (faileddatas && Array.isArray(faileddatas.data) ? faileddatas.data : []);
+
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6 w-11/12 max-w-4xl max-h-screen overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Failed Details</h2>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border">
+              <thead className="bg-blue-500 text-white">
+                <tr>
+                  <th className="py-2 px-4 border">S.No</th>
+                  <th className="py-2 px-4 border">Tnx ID</th>
+                  <th className="py-2 px-4 border">Firstname</th>
+                  <th className="py-2 px-4 border">Amount</th>
+                  <th className="py-2 px-4 border">E-mail</th>
+                  <th className="py-2 px-4 border">Product Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fdata.length > 0 ? (
+                  fdata.map((datas, index) => (
+                    <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                      <td className="py-2 px-4 border">{index + 1}</td>
+                      <td className="py-2 px-4 border">{datas.txnid || datas.txnid}</td>
+                      <td className="py-2 px-4 border">{datas.firstname}</td>
+                      <td className="py-2 px-4 border">
+                        <span className={`px-2 py-1 rounded-full text-xs ${datas.status === 'SUCCESS' ? 'bg-green-100 text-green-800' :
+                          datas.status === 'FAILED' ? 'bg-red-100 text-red-800' :
+                            datas.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                              datas.status === 'EXPIRED' ? 'bg-gray-100 text-gray-800' :
+                                'bg-blue-100 text-blue-800'
+                          }`}>
+                          {datas.amount}
+                        </span>
+
+                      </td>
+                      <td className="py-2 px-4 border">{datas.email || datas.email}</td>
+                      <td className="py-2 px-4 border">{datas.productinfo || datas.productinfo}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="py-4 text-center">No payment data available</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className='mt-3'>
+
+          </div>
+
+          {/* <div className="mt-4 flex justify-center">
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                // Show pages around current page
+                const pageNumber = currentPage - 2 + i;
+                if (pageNumber > 0 && pageNumber <= totalPages) {
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(pageNumber)}
+                      className={`px-3 py-1 rounded ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'
+                        }`}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                }
+                return null;
+              })}
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div> */}
+        </div>
+      </div>
+    );
+  };
+  const ExpiredListModal = ({ onClose }) => {
+    const edata = Array.isArray(expireddatas) ? expireddatas :
+      (expireddatas && Array.isArray(expireddatas.data) ? expireddatas.data : []);
+
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6 w-11/12 max-w-4xl max-h-screen overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Expired Details</h2>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border">
+              <thead className="bg-blue-500 text-white">
+                <tr>
+                  <th className="py-2 px-4 border">S.No</th>
+                  <th className="py-2 px-4 border">Tnx ID</th>
+                  <th className="py-2 px-4 border">Firstname</th>
+                  <th className="py-2 px-4 border">Amount</th>
+                  <th className="py-2 px-4 border">E-mail</th>
+                  <th className="py-2 px-4 border">Product Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                {edata.length > 0 ? (
+                  edata.map((datas, index) => (
+                    <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                      <td className="py-2 px-4 border">{index + 1}</td>
+                      <td className="py-2 px-4 border">{datas.txnid || datas.txnid}</td>
+                      <td className="py-2 px-4 border">{datas.firstname}</td>
+                      <td className="py-2 px-4 border">
+                        <span className={`px-2 py-1 rounded-full text-xs ${datas.status === 'SUCCESS' ? 'bg-green-100 text-green-800' :
+                          datas.status === 'FAILED' ? 'bg-red-100 text-red-800' :
+                            datas.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                              datas.status === 'EXPIRED' ? 'bg-gray-100 text-gray-800' :
+                                'bg-blue-100 text-blue-800'
+                          }`}>
+                          {datas.amount}
+                        </span>
+
+                      </td>
+                      <td className="py-2 px-4 border">{datas.email || datas.email}</td>
+                      <td className="py-2 px-4 border">{datas.productinfo || datas.productinfo}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="py-4 text-center">No payment data available</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className='mt-3'>
+
+          </div>
+
+          {/* <div className="mt-4 flex justify-center">
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                // Show pages around current page
+                const pageNumber = currentPage - 2 + i;
+                if (pageNumber > 0 && pageNumber <= totalPages) {
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(pageNumber)}
+                      className={`px-3 py-1 rounded ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'
+                        }`}
+                    >
+                      {pageNumber}
+                    </button>
+                  );
+                }
+                return null;
+              })}
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div> */}
+        </div>
+      </div>
+    );
+  };
+
+  const PendingListModal = ({ onClose }) => {
+    const pdata = Array.isArray(pendingdatas) ? pendingdatas :
+      (pendingdatas && Array.isArray(pendingdatas.data) ? pendingdatas.data : []);
+
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg p-6 w-11/12 max-w-4xl max-h-screen overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Pending Details</h2>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border">
+              <thead className="bg-blue-500 text-white">
+                <tr>
+                  <th className="py-2 px-4 border">S.No</th>
+                  <th className="py-2 px-4 border">Tnx ID</th>
+                  <th className="py-2 px-4 border">Firstname</th>
+                  <th className="py-2 px-4 border">Amount</th>
+                  <th className="py-2 px-4 border">E-mail</th>
+                  <th className="py-2 px-4 border">Product Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pdata.length > 0 ? (
+                  pdata.map((datas, index) => (
+                    <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                      <td className="py-2 px-4 border">{index + 1}</td>
                       <td className="py-2 px-4 border">{datas.txnid || datas.txnid}</td>
                       <td className="py-2 px-4 border">{datas.firstname}</td>
                       <td className="py-2 px-4 border">
@@ -1309,21 +1661,35 @@ const Dashboardpie = () => {
       )}
 
 
-      
+
       {/* Payment List Modal */}
-      {showPaymentList  && selecteddata.name === "TOTAL" && (
+      {showPaymentList && selecteddata.name === "TOTAL" && (
         <PaymentListModal onClose={() => setShowPaymentList(false)} />
-      )} 
+      )}
 
       {/* success list model */}
 
-      {showPaymentList &&  selecteddata.name === "SUCCESS" &&  (
+      {showPaymentList && selecteddata.name === "SUCCESS" && (
         <SuccessListModal onClose={() => setShowPaymentList(false)} />
+      )}
+
+      {showPaymentList && selecteddata.name === "FAILED" && (
+        <FailedListModal onClose={() => setShowPaymentList(false)} />
+      )}
+
+
+      {showPaymentList && selecteddata.name === "EXPIRED" && (
+        <ExpiredListModal onClose={() => setShowPaymentList(false)} />
+      )}
+
+
+      {showPaymentList && selecteddata.name === "PENDING" && (
+        <PendingListModal onClose={() => setShowPaymentList(false)} />
       )}
 
     </div>
 
-   
+
 
 
   );

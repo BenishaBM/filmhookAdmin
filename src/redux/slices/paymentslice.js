@@ -28,6 +28,47 @@ export const paymentsuccess = createAsyncThunk("Dashboard/paymentsuccess", async
 
 })
 
+
+export const paymentfailed = createAsyncThunk("Dashboard/paymentfailed", async (status, { rejectWithValue }) => {
+    try {
+        const response = await privateAPI.get(Apiconfig.successusers, { params: status });
+        console.log(response.data)
+        return response.data
+
+    } catch (error) {
+        return rejectWithValue(error.response?.data || error.message)
+
+    }
+
+})
+
+export const paymentexpired = createAsyncThunk("Dashboard/paymentexpired", async (status, { rejectWithValue }) => {
+    try {
+        const response = await privateAPI.get(Apiconfig.successusers, { params: status });
+        console.log(response.data)
+        return response.data
+
+    } catch (error) {
+        return rejectWithValue(error.response?.data || error.message)
+
+    }
+
+})
+
+
+export const paymentpending = createAsyncThunk("Dashboard/paymentpending", async (status, { rejectWithValue }) => {
+    try {
+        const response = await privateAPI.get(Apiconfig.successusers, { params: status });
+        console.log(response.data)
+        return response.data
+
+    } catch (error) {
+        return rejectWithValue(error.response?.data || error.message)
+
+    }
+
+})
+
 export const getAllTotalUsers = createAsyncThunk(
     "Dashboard/getAllTotalUsers",
     async (pageDetails, { rejectWithValue }) => {
@@ -59,13 +100,23 @@ const paymentslice = createSlice({
         getalltotalerrormessage: null,
         getsuccessloadingstatus : "idle",
         getsuccesserrormessage : null,
-        getsuccessdatalist : []
+        getsuccessdatalist : [],
+        getfailedloadingstatus : "idle",
+        getfailederrormessage : null,
+        getfaileddatalist : [],
+        getexpiredloadingstatus : "idle",
+        getexpirederrormessage : null,
+        getexpireddatalist : [],
+        getpendingloadingstatus : "idle",
+        getpendingerrormessage : null,
+        getpendingdatalist : []
+
     },
     reducers: {
 
     },
-    extraReducers: (builer) => {
-        builer
+    extraReducers: (builder) => {
+        builder
             .addCase(paymentTotalCount.pending, (state) => {
                 state.getallpaymentloadingstatus = "pending"
                 state.getallpaymenterrormessage = null
@@ -124,6 +175,63 @@ const paymentslice = createSlice({
 
             })
 
+            .addCase(paymentfailed.pending, (state) => {
+                state.getfailedloadingstatus = "pending"
+                state.getfailederrormessage = null
+
+
+
+            })
+            .addCase(paymentfailed.fulfilled, (state, action) => {
+                state.getfailedloadingstatus = "succeed"
+                state.getfaileddatalist = action.payload.data;
+                console.log(state.getfaileddatalist)
+
+            })
+            .addCase(paymentfailed.rejected, (state, action) => {
+                state.getfailedloadingstatus = "failed";
+                state.getfailederrormessage = action.payload;
+
+            })
+
+            .addCase(paymentexpired.pending, (state) => {
+                state.getexpiredloadingstatus = "pending"
+                state.getexpirederrormessage = null
+
+
+
+            })
+            .addCase(paymentexpired.fulfilled, (state, action) => {
+                state.getexpiredloadingstatus = "succeed"
+                state.getexpireddatalist = action.payload.data;
+                console.log(state.getexpireddatalist)
+
+            })
+            .addCase(paymentexpired.rejected, (state, action) => {
+                state.getexpiredloadingstatus = "failed";
+                state.getexpirederrormessage = action.payload;
+
+            })
+
+            .addCase(paymentpending.pending, (state) => {
+                state.getpendingloadingstatus = "pending"
+                state.getpendingerrormessage = null
+
+
+
+            })
+            .addCase(paymentpending.fulfilled, (state, action) => {
+                state.getpendingloadingstatus = "succeed"
+                state.getpendingdatalist = action.payload.data;
+                console.log(state.getpendingdatalist)
+
+            })
+            .addCase(paymentpending.rejected, (state, action) => {
+                state.getpendingloadingstatus = "failed";
+                state.getpendingerrormessage = action.payload;
+
+            })
+
 
     }
 })
@@ -132,4 +240,8 @@ const paymentslice = createSlice({
 export const paymentcount = (state) => state.paymentdetails.getallpaymentcountlist;
 export const totalpayment = (state) => state.paymentdetails.getalltotalcountlist;
 export const successdata = (state) => state.paymentdetails.getsuccessdatalist;
+export const faildata = (state) => state.paymentdetails.getfaileddatalist; 
+export const expiredata = (state) => state.paymentdetails.getexpireddatalist;
+export const pendingdata = (state) => state.paymentdetails.getpendingdatalist;
+
 export default paymentslice.reducer;
