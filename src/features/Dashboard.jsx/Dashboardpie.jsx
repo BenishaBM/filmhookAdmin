@@ -512,6 +512,7 @@
 
 
 import React, { useEffect, useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { dashboardval, getAllDashboardValue } from '../../redux/slices/DashboardSlice';
 import { getIndustryUserAction, getPublicUserAction, getUserAction, Industryuservalues, publicuservalues, uservalues } from '../../redux/slices/UsermanagementSlice';
@@ -765,7 +766,7 @@ const Dashboardpie = () => {
 
 
   const handleBarClick = (data) => {
-    
+
     setselecteddata(data); // updates the state, but it's async
     console.log(selecteddata);     // log the actual clicked data
     setShowPaymentList(true);
@@ -880,6 +881,12 @@ const Dashboardpie = () => {
     }
   };
 
+
+
+
+
+
+
   // Modal component for user list popup
   const UserListModal = ({ onClose }) => {
     const displayData = getDisplayData();
@@ -889,6 +896,10 @@ const Dashboardpie = () => {
         <div className="bg-white rounded-lg p-6 w-11/12 max-w-4xl max-h-screen overflow-y-auto">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">{selectedUserType}</h2>
+            <div className='flex ml-80'>
+              <FaSearch size={20} />
+            </div>
+
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700"
@@ -901,12 +912,15 @@ const Dashboardpie = () => {
             <table className="min-w-full bg-white border">
               <thead className="bg-blue-500 text-white">
                 <tr>
-                  <th className="py-2 px-4 border">User ID</th>
+                  <th className="py-2 px-4 border"> ID</th>
                   <th className="py-2 px-4 border">Name</th>
                   <th className="py-2 px-4 border">Email</th>
                   <th className="py-2 px-4 border">Gender</th>
+
                   <th className="py-2 px-4 border">Date of Birth</th>
                   <th className="py-2 px-4 border">Phone Number</th>
+                  <th className="py-2 px-4 border">Address</th>
+                  <th className="py-2 px-4 border">User type</th>
                 </tr>
               </thead>
               <tbody>
@@ -919,6 +933,8 @@ const Dashboardpie = () => {
                       <td className="py-2 px-4 border">{user.gender}</td>
                       <td className="py-2 px-4 border">{user.dob || user.dateOfBirth}</td>
                       <td className="py-2 px-4 border">{user.phoneNumber}</td>
+                      <td className="py-2 px-4 border">{user.address}</td>
+                      <td className="py-2 px-4 border">{user.usertype}</td>
                     </tr>
                   ))
                 ) : (
@@ -1097,7 +1113,7 @@ const Dashboardpie = () => {
 
 
   const SuccessListModal = ({ onClose }) => {
-    
+
     const sdata = Array.isArray(successdatas) ? successdatas :
       (successdatas && Array.isArray(successdatas.data) ? successdatas.data : []);
 
@@ -1560,32 +1576,165 @@ const Dashboardpie = () => {
     );
   };
 
-  return (
-    <div className="grid grid-cols-2 grid-rows-2 gap-4 h-screen p-4">
-      {/* First Part: User Management with Pie Chart */}
-      <div className="bg-white rounded-lg shadow-md p-4 row-span-2">
-        <div className="h-full flex flex-col">
-          <h1 className="text-4xl font-bold mt-10">User Management</h1>
+  // return (
+  //   <div className="grid grid-cols-2 grid-rows-2 gap-4 h-screen p-4">
+  //     {/* First Part: User Management with Pie Chart */}
+  //     <div className="bg-white rounded-lg shadow-md p-4 row-span-2">
+  //       <div className="h-full flex flex-col">
+  //         <h1 className="text-4xl font-bold mt-10">User Management</h1>
 
-          {/* Center the pie chart and legend vertically and horizontally */}
+  //         {/* Center the pie chart and legend vertically and horizontally */}
+  //         <div className="flex-grow flex flex-col justify-center items-center">
+  //           {dashboardData ? (
+  //             <div className="flex flex-col md:flex-row items-center justify-center w-full mb-16">
+  //               {/* SVG Pie Chart */}
+  //               <div className="mb-4 md:mb-0">
+  //                 {createPieChart()}
+  //               </div>
+
+  //               {/* Legend */}
+  //               <div className="md:ml-8 ">
+  //                 {pieChartData.map((item, index) => (
+  //                   <div
+  //                     key={index}
+  //                     className="flex items-center mb-3 cursor-pointer hover:bg-gray-100 p-2 rounded transition duration-150"
+  //                     onClick={() => handleeffect(item.name)}
+  //                   >
+  //                     <div className="w-5 h-5 mr-3" style={{ backgroundColor: item.color }}></div>
+  //                     <span className="text-lg font-medium">
+  //                       {item.name}: {item.value} ({((item.value / total) * 100).toFixed(1)}%)
+  //                     </span>
+  //                   </div>
+  //                 ))}
+  //               </div>
+  //             </div>
+  //           ) : (
+  //             <div className="flex items-center justify-center h-32 w-full">
+  //               <p>Loading dashboard data...</p>
+  //             </div>
+  //           )}
+  //         </div>
+  //       </div>
+  //     </div>
+
+  //     {/* Second Part: Reports Bar Chart */}
+  //     <div className="bg-white rounded-lg shadow-md p-4">
+  //       <h2 className="text-xl font-bold mb-4">Reports</h2>
+  //       <div className="h-full">
+  //         {reportData.length > 0 ? (
+  //           <ResponsiveContainer width="100%" height={250}>
+  //             <BarChart
+  //               data={reportData}
+  //               margin={{ top: 5, right: 30, left: 20, bottom: 50 }}
+  //             >
+  //               <CartesianGrid strokeDasharray="3 3" />
+  //               <XAxis
+  //                 dataKey="name"
+  //                 angle={-45}
+  //                 textAnchor="end"
+  //                 height={70}
+  //                 tick={{ fontSize: 12 }}
+  //               />
+  //               <YAxis />
+  //               <Tooltip
+  //                 formatter={(value, name) => [`${value}`, 'Count']}
+  //               />
+  //               <Legend />
+  //               <Bar dataKey="count" name="Report Count" />
+  //             </BarChart>
+  //           </ResponsiveContainer>
+  //         ) : (
+  //           <div className="flex items-center justify-center h-full">
+  //             <p className="text-gray-500">Loading report data...</p>
+  //           </div>
+  //         )}
+  //       </div>
+  //     </div>
+
+  //     {/* Fourth Part: Payment Details with Clickable Chart */}
+  //     <div className="bg-white rounded-lg shadow-md p-4">
+  //       <h2 className="text-xl font-bold mb-4">Payment Details</h2>
+  //       <div className="h-full">
+  //         {payment.length > 0 ? (
+  //           <CustomBarChart
+  //             data={payment}
+  //             handleBarClick={handleBarClick}
+  //           />
+  //         ) : (
+  //           <div className="flex items-center justify-center h-full">
+  //             <p className="text-gray-500">Loading payment data...</p>
+  //           </div>
+  //         )}
+  //         <div className="mt-2 text-center text-xs text-gray-500">
+  //           Click on the 'Total' bar to view detailed payment information
+  //         </div>
+  //       </div>
+  //     </div>
+
+  //     {/* User List Modal */}
+  //     {showUserList && (
+  //       <UserListModal onClose={() => setShowUserList(false)} />
+  //     )}
+
+
+
+  //     {/* Payment List Modal */}
+  //     {showPaymentList && selecteddata.name === "TOTAL" && (
+  //       <PaymentListModal onClose={() => setShowPaymentList(false)} />
+  //     )}
+
+  //     {/* success list model */}
+
+  //     {showPaymentList && selecteddata.name === "SUCCESS" && (
+  //       <SuccessListModal onClose={() => setShowPaymentList(false)} />
+  //     )}
+
+  //     {showPaymentList && selecteddata.name === "FAILED" && (
+  //       <FailedListModal onClose={() => setShowPaymentList(false)} />
+  //     )}
+
+
+  //     {showPaymentList && selecteddata.name === "EXPIRED" && (
+  //       <ExpiredListModal onClose={() => setShowPaymentList(false)} />
+  //     )}
+
+
+  //     {showPaymentList && selecteddata.name === "PENDING" && (
+  //       <PendingListModal onClose={() => setShowPaymentList(false)} />
+  //     )}
+
+  //   </div>
+
+
+
+
+  // );
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 min-h-screen p-4">
+      {/* First Part: User Management with Pie Chart */}
+      <div className="bg-white rounded-lg shadow-md p-4 md:row-span-2 order-1">
+        <div className="h-full flex flex-col">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mt-4 md:mt-6 text-center md:text-left">User Management</h1>
+  
+          {/* Center the pie chart and legend */}
           <div className="flex-grow flex flex-col justify-center items-center">
             {dashboardData ? (
-              <div className="flex flex-col md:flex-row items-center justify-center w-full mb-16">
+              <div className="flex flex-col w-full mb-8 md:mb-16">
                 {/* SVG Pie Chart */}
-                <div className="mb-4 md:mb-0">
+                <div className="flex justify-center mb-6">
                   {createPieChart()}
                 </div>
-
+  
                 {/* Legend */}
-                <div className="md:ml-8 ">
+                <div className="w-full px-2 md:px-4">
                   {pieChartData.map((item, index) => (
                     <div
                       key={index}
                       className="flex items-center mb-3 cursor-pointer hover:bg-gray-100 p-2 rounded transition duration-150"
                       onClick={() => handleeffect(item.name)}
                     >
-                      <div className="w-5 h-5 mr-3" style={{ backgroundColor: item.color }}></div>
-                      <span className="text-lg font-medium">
+                      <div className="w-4 md:w-5 h-4 md:h-5 mr-2 md:mr-3" style={{ backgroundColor: item.color }}></div>
+                      <span className="text-sm md:text-base lg:text-lg font-medium">
                         {item.name}: {item.value} ({((item.value / total) * 100).toFixed(1)}%)
                       </span>
                     </div>
@@ -1600,30 +1749,30 @@ const Dashboardpie = () => {
           </div>
         </div>
       </div>
-
+  
       {/* Second Part: Reports Bar Chart */}
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <h2 className="text-xl font-bold mb-4">Reports</h2>
-        <div className="h-full">
+      <div className="bg-white rounded-lg shadow-md p-4 order-2 md:order-2">
+        <h2 className="text-lg md:text-xl font-bold mb-4">Reports</h2>
+        <div className="h-64 md:h-full">
           {reportData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={250}>
+            <ResponsiveContainer width="100%" height={200} className="mt-2">
               <BarChart
                 data={reportData}
-                margin={{ top: 5, right: 30, left: 20, bottom: 50 }}
+                margin={{ top: 5, right: 10, left: 0, bottom: 40 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   dataKey="name"
                   angle={-45}
                   textAnchor="end"
-                  height={70}
-                  tick={{ fontSize: 12 }}
+                  height={60}
+                  tick={{ fontSize: 10 }}
                 />
-                <YAxis />
+                <YAxis tick={{ fontSize: 10 }} />
                 <Tooltip
                   formatter={(value, name) => [`${value}`, 'Count']}
                 />
-                <Legend />
+                <Legend wrapperStyle={{ fontSize: '10px' }} />
                 <Bar dataKey="count" name="Report Count" />
               </BarChart>
             </ResponsiveContainer>
@@ -1634,64 +1783,55 @@ const Dashboardpie = () => {
           )}
         </div>
       </div>
-
+  
       {/* Fourth Part: Payment Details with Clickable Chart */}
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <h2 className="text-xl font-bold mb-4">Payment Details</h2>
-        <div className="h-full">
+      <div className="bg-white rounded-lg shadow-md p-4 order-3 md:order-3">
+        <h2 className="text-lg md:text-xl font-bold mb-4">Payment Details</h2>
+        <div className="h-64 md:h-full">
           {payment.length > 0 ? (
-            <CustomBarChart
-              data={payment}
-              handleBarClick={handleBarClick}
-            />
+            <div className="h-full">
+              <CustomBarChart
+                data={payment}
+                handleBarClick={handleBarClick}
+              />
+              <div className="mt-2 text-center text-xs text-gray-500">
+                Click on a bar to view detailed payment information
+              </div>
+            </div>
           ) : (
             <div className="flex items-center justify-center h-full">
               <p className="text-gray-500">Loading payment data...</p>
             </div>
           )}
-          <div className="mt-2 text-center text-xs text-gray-500">
-            Click on the 'Total' bar to view detailed payment information
-          </div>
         </div>
       </div>
-
+  
       {/* User List Modal */}
       {showUserList && (
         <UserListModal onClose={() => setShowUserList(false)} />
       )}
-
-
-
-      {/* Payment List Modal */}
+  
+      {/* Payment List Modals */}
       {showPaymentList && selecteddata.name === "TOTAL" && (
         <PaymentListModal onClose={() => setShowPaymentList(false)} />
       )}
-
-      {/* success list model */}
-
+  
       {showPaymentList && selecteddata.name === "SUCCESS" && (
         <SuccessListModal onClose={() => setShowPaymentList(false)} />
       )}
-
+  
       {showPaymentList && selecteddata.name === "FAILED" && (
         <FailedListModal onClose={() => setShowPaymentList(false)} />
       )}
-
-
+  
       {showPaymentList && selecteddata.name === "EXPIRED" && (
         <ExpiredListModal onClose={() => setShowPaymentList(false)} />
       )}
-
-
+  
       {showPaymentList && selecteddata.name === "PENDING" && (
         <PendingListModal onClose={() => setShowPaymentList(false)} />
       )}
-
     </div>
-
-
-
-
   );
 };
 

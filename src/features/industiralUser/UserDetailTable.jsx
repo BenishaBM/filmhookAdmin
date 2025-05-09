@@ -136,6 +136,7 @@ const UserDetailsTable = ({ records, firstIndex = 0 }) => {
     // "Film Count", 
     // "Net Worth", 
     // "Daily Salary"
+    "SubProfession Name"
   ];
 
   return (
@@ -204,6 +205,10 @@ const UserDetailsTable = ({ records, firstIndex = 0 }) => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                   {item.professionName}
+                </td>
+
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  {item.subproffession}
                 </td>
                 {/* <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900 font-medium">{item.filmCount}</div>

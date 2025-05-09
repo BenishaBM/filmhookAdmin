@@ -182,7 +182,7 @@ import { Typography } from "@material-tailwind/react";
 import { UserCircleIcon, PowerIcon } from "@heroicons/react/24/solid";
 import { RiAdminFill } from "react-icons/ri";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
-import flimhookLogo from "../assets/logo/flimhookLogo.png";
+import flimhookLogo from "../assets/logo/Logo.png"; //changing
 import { GoReport } from "react-icons/go";
 import { useDispatch } from "react-redux";
 import { userLogout } from "../redux/slices/loginSlice";
@@ -199,13 +199,39 @@ export default function Sidebar() {
     setOpen(open === value ? 0 : value);
   };
 
+  // const handleLogout = () => {
+  //   dispatch(userLogout());
+  // };
+
+
   const handleLogout = () => {
-    dispatch(userLogout());
-  };
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+    if (confirmLogout) {
+      dispatch(userLogout());
+      console.log("Logged out successfully!");
+    } else {
+      console.log("Logout canceled.");
+    }
+  };   // changing 28
+
+
+  
 
   useEffect(() => {
+    console.log(userType)
     setUserType(localStorage.getItem("userType"));
+    
   }, []);
+
+
+  useEffect(()=>{
+    
+    if(userType === "SuperAdmin"){
+      setUserType("Super  Admin")
+      console.log(userType) // changing 29
+
+    }
+  })
 
   // Check if a path is active
   const isActive = (path) => {
@@ -236,6 +262,10 @@ export default function Sidebar() {
       }`;
   };
 
+  // logout alertpopup
+
+  
+
   return (
     <div className="h-screen w-96 bg-white shadow-lg flex flex-col overflow-y-auto">
       {/* Logo section with gradient background */}
@@ -244,11 +274,10 @@ export default function Sidebar() {
 
         {/* User profile overview */}
         <div className="mt-6 pb-2 flex items-center">
-          <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">
-            <UserCircleIcon className="h-6 w-6" />
-          </div>
-          <div className="ml-3">
-            <Typography color="white" className="text-sm font-medium">
+            
+          
+          <div className="ml-20">
+            <Typography color="white" className="text-lg font-medium">
               {userType || "User"}
             </Typography>
             
@@ -263,7 +292,7 @@ export default function Sidebar() {
         <nav className="flex flex-col gap-1 mt-2">
           {/* Dashboard Link */}
           <Link to="/layout/dashboard">
-            <div className={getMenuItemClasses("/layout")}>
+            <div className={getMenuItemClasses("/layout/dashboard")}>
               <div className="p-1 bg-blue-100 rounded text-blue-800">
                 <RiAdminFill className="h-4 w-4" />
               </div>
@@ -272,7 +301,7 @@ export default function Sidebar() {
           </Link>
 
           {/* SuperAdmin Panel */}
-          {userType === "SuperAdmin" && (
+          {userType === "Super  Admin" && (
             <div>
               <div
                 className={getAccordionHeaderClasses(1)}
@@ -310,7 +339,7 @@ export default function Sidebar() {
               <div className="p-1 bg-green-100 rounded text-green-800">
                 <UserCircleIcon className="h-4 w-4" />
               </div>
-              <span>Industrial User</span>
+              <span>Industry User Request</span>
             </div>
           </Link>
 
@@ -320,7 +349,7 @@ export default function Sidebar() {
               <div className="p-1 bg-amber-100 rounded text-amber-800">
                 <GoReport className="h-4 w-4" />
               </div>
-              <span>Reports</span>
+              <span>Report Post</span>
             </div>
           </Link>
 
@@ -343,7 +372,7 @@ export default function Sidebar() {
           className="flex items-center gap-3 w-full py-2.5 px-4 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-700 transition-colors duration-200"
         >
           <PowerIcon className="h-5 w-5 text-red-500" />
-          <span>Log Out</span>
+          <span >Log Out</span>
         </button>
       </div>
     </div>

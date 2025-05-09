@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import flimHookLogo from "../assets/logo/flimhookLogo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, selectLoginError } from "../redux/slices/loginSlice";
 import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 // Define validation schema
+
+
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email address")
@@ -21,24 +24,34 @@ const initialValues = {
 };
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginError = useSelector(selectLoginError);
 
-  
 
-  
+
+
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const result = dispatch(loginUser(values)); // Await dispatch result
       if (result.payload) {
-       navigate('/layout')
+        navigate('/layout')
       }
     } catch (error) {
       console.error("LoginFailed", error);
     }
     setSubmitting(false);
+  };
+
+
+
+  const togglePasswordVisibility = () => {
+
+    setShowPassword((prevState) => !prevState);
+    console.log(showPassword)
   };
   return (
     <div className=" h-screen w-full flex items-center justify-center">
@@ -74,27 +87,38 @@ const Login = () => {
                 />
               </div>
 
-              <div className=" my-2">
+              <div className="my-2">
                 <label
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Password
                 </label>
-                <Field
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="Enter your password"
-                  className="mt-1 p-2 w-full border rounded-md"
-                />
+                <div className="relative mt-1">
+                  <Field
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    className="p-2 w-full border rounded-md"
+                  />
+                  <div
+                    onClick={togglePasswordVisibility}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+                  >
+                    {showPassword ? <FaEye /> : <FaEyeSlash />}  
+                  </div>
+                </div>   
+                {/* changing 28 */}
                 <ErrorMessage
                   name="password"
                   component="div"
                   className="text-red-500 text-sm"
                 />
               </div>
-              {loginError && <p>{loginError}</p>}
+
+              {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
+
 
               <div className=" flex">
                 {" "}

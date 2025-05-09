@@ -11,6 +11,9 @@ import {
   getUnverifiedProfilesAPI,
  
 } from "../../api/industrialUser";
+import { TrophyIcon } from "@heroicons/react/24/solid";
+import Apiconfig from "../../api/Apiconfig";
+import { act } from "react";
 
 // not verified industrial user list
 const jwt = localStorage.getItem("jwt");
@@ -53,6 +56,19 @@ export const getUnverifiedProfileFilesAction = createAsyncThunk(
 )
 
 
+// export const getprofileinfo = createAsyncThunk("industiralUser/getprofileinfo", async(details, {rejectWithValue}) =>{
+//   try {
+//     const response = await privateApi.get(Apiconfig.profileinfo,{params: details})
+//     console.log(response.data)
+//     return response.data
+    
+//   } catch (error) {
+//     return rejectWithValue(error.response?.data || error.message)
+    
+//   }
+// })
+
+
 
 export const unVerifiedIndustrialUserSlice = createSlice({
   name: "industrialUser",
@@ -61,11 +77,14 @@ export const unVerifiedIndustrialUserSlice = createSlice({
     getListLoadingStatus: "idle",
     getListErrorMessage: null,
     unverifiedIndestiraluserDetails: [],
-    getDetailsLoadingStatus: "idel",
+    getDetailsLoadingStatus: "idle",
     getDetailsErrorMessage: null,
     unverifiedUserFiles: [],
     unverifiedUserFilesLoadingStatus: "idel",
     unverifiedUserFilesErrorMessage: null,
+    // getInfoList : [],
+    // getInfoLoadingStatus : "idle",
+    // getInfoErrorMessage : null
   
   },
   reducers: {},
@@ -97,7 +116,7 @@ export const unVerifiedIndustrialUserSlice = createSlice({
       .addCase(
         getUnverifiedIndustrialUserDetailsAction.fulfilled,
         (state, action) => {
-          state.getDetailsLoadingStatus = "succeeded";
+          state.getDetailsLoadingStatus = "succeeded"; 
           state.getDetailsErrorMessage = null;
           state.unverifiedIndestiraluserDetails = action.payload;
         }
@@ -124,9 +143,26 @@ export const unVerifiedIndustrialUserSlice = createSlice({
         state. unverifiedUserFilesLoadingStatus= "failed";
         state.unverifiedUserFilesErrorMessage = action.error.message;
       }
-      );
+      )
+      // .addCase(getprofileinfo.pending, (state)=>{
+      //   state.getInfoLoadingStatus = "loading";
+      //   state.getInfoErrorMessage = null
+        
+      // })
+      // .addCase(getprofileinfo.fulfilled, (state,action)=>{
+      //   state.getInfoLoadingStatus = "succeed";
+      //   state.getInfoList = action.payload
+      //   console.log(state.getInfoList)
+      // })
+      // .addCase(getprofileinfo.rejected, (state,action)=>{
+      //   state.getInfoLoadingStatus = "failed";
+      //   state.getInfoErrorMessage = action.error.message;
+      // })
      
   },
 });
+
+
+export const profileinfovalue = (state) => state.industrialUser.getInfoList
 
 export default unVerifiedIndustrialUserSlice.reducer;

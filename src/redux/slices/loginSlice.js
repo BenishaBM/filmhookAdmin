@@ -3,6 +3,7 @@ import publicAPI from "../../api/publicApi";
 import Apiconfig from "../../api/Apiconfig";
 import { editAdminPasswordApi} from "../../api/subadminServices";
 
+
 // login users
 export const loginUser = createAsyncThunk(
   "login/loginUser",
@@ -17,6 +18,9 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem("email", data.email);
       return data;
     } catch (error) {
+      // {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      // console.log(rejectWithValue(error.response.data.message))
       return rejectWithValue(error.response.data.message);
     }
   }

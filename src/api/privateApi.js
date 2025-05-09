@@ -20,6 +20,7 @@ privateAPI.interceptors.request.use(async (config) => {
     // Attach JWT token to request headers
     config.headers.Authorization = ` Bearer ${jwt}`;
     return config;
+
   } catch (error) {
     console.error("Error attaching JWT token to request:", error.message);
     throw error;
@@ -34,7 +35,7 @@ privateAPI.interceptors.response.use(
   },
   async function (error) {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response.status === 401 && !originalRequest._rtery) {
       originalRequest._retry = true;
 
       try {
@@ -48,7 +49,9 @@ privateAPI.interceptors.response.use(
       }
     }
     return Promise.reject(error);
+
   }
 );
 
 export default privateAPI;
+

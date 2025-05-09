@@ -38,12 +38,20 @@ const Report = () => {
   } = useSelector((state) => state.reportPost);
   const dispatch = useDispatch();
 
+
+  useEffect(()=> {
+    console.log(getAllPostReportList)
+
+  })
+
   const reportPosts = getAllPostReportList.map((report) => ({
     userDetails: report.reportUserIds,
     posts: report.postWebModel.postFiles,
     postId: report.postWebModel.id,
     description: report.postWebModel.description,
-    reportCount: report.reportUserIdCount,
+    // reportCount: report.reportUserIdCount,
+    reportCount : report.reportUserIds[0].reportCount
+
   }));
   const [currentPage, setCurrentPage] = useState(1);
   const [searchName, setSearchName] = useState("");

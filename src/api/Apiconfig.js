@@ -41,7 +41,8 @@ const Apiconfig = {
   getreportscount : "/admin/getAllReportPostCount",
   getpaymentcount : "/admin/getAllPaymentStatusCount",
   Totalpaymentusers : "/admin/getAllPaymentUserData",
-  successusers  : "/admin/getAllPaymentStatus"
+  successusers  : "/admin/getAllPaymentStatus",
+  profileinfo : "/user/getUserByUserId"
 };
 
 export default Apiconfig;

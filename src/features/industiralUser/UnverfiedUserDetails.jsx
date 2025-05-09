@@ -252,6 +252,7 @@ import DialogBox from "../../component/VideoBox";
 import ImageDialog from "../../component/ImageDialog";
 import UserDetailsTable from "./UserDetailTable";
 import { approveUnverifiedInductrialUserProfile } from "../../api/industrialUser";
+import Userinfo from "./Userinfo";
 
 const UnverfiedUserDetails = () => {
   const dispatch = useDispatch();
@@ -303,6 +304,7 @@ const UnverfiedUserDetails = () => {
             netWorth: platform.netWorth,
             dailySalary: platform.dailySalary,
             userId: industry.iupdId,
+            subproffession: profession.subProfessionName  // changing 28
           })
         )
       )
@@ -506,15 +508,35 @@ const UnverfiedUserDetails = () => {
             </svg>
             One-Minute Video
           </button>
+          {/* profession tab */}
+          <button
+            className={`px-6 py-4 flex items-center ${activeTab === 'profile' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'}`}
+            onClick={() => setActiveTab('profession')}
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            Professionals
+          </button>
         </div>
 
         {/* Tab Content */}
         <div className="p-6">
-          {activeTab === 'profile' && (
+          {activeTab === 'profession' && (
             <div>
               <UserDetailsTable records={records} />
             </div>
           )}
+
+          {activeTab === "profile" && (
+            <div>
+              <Userinfo> </Userinfo>
+            </div>
+
+          )
+
+          }
+
 
           {activeTab === 'documents' && (
             <div>
@@ -576,7 +598,7 @@ const UnverfiedUserDetails = () => {
                   className="bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-blue-50 hover:border-blue-200 transition-colors duration-200 flex items-center cursor-pointer"
                 >
                   <div className="w-12 h-12 flex items-center justify-center bg-purple-100 rounded-lg mr-4">
-                  <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                     </svg>
                   </div>
@@ -592,6 +614,9 @@ const UnverfiedUserDetails = () => {
               </div>
             </div>
           )}
+
+
+
         </div>
       </div>
 
@@ -618,7 +643,7 @@ const UnverfiedUserDetails = () => {
           setopenDialogBox={setopenDialogBox}
           urls={urls}
         />
-      )}   
+      )}
       {/* both video and oneminute video popup are in videobox components */}
 
       {/* Review Dialog */}

@@ -290,7 +290,7 @@ const NotVerifiedUserIndustrialList = () => {
           variant="h1"
           className="text-4xl font-bold text-blue-800 text-center my-6"
         >
-          Unverified Industrial Users
+          Un verified Industrial User
         </Typography>
 
 
