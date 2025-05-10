@@ -2,21 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getallPostReportApi } from "../../api/reportPost";
 import privateAPI from "../../api/privateApi";
 import Apiconfig from "../../api/Apiconfig";
-// import { getalluservalue } from "../../api/reportPost";
 
-// get all post report
-// export const getAllPostReportAction = createAsyncThunk(
-//   "industrialUser/getAllPostReportAction",
-//   async (pageDetails, { rejectWithValue }) => {
-//     try {
-//       const response = await getallPostReportApi(pageDetails);
-//       return response.combinedDetailsList;
-//     } catch (error) {
-//       console.log("redux", error.response);
-//       return rejectWithValue(error.response?.data || error.message);
-//     }
-//   }
-// );
 
 export const getAllPostReportAction  = createAsyncThunk("industrialUser/getAllPostReportAction",async(pageDetails,{rejectWithValue}) =>{
 

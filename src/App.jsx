@@ -16,6 +16,8 @@ import { useSelector } from "react-redux";
 import { getUserType } from "./redux/slices/loginSlice";
 import UserList from "./features/industiralUser/UserList";
 import Dashboardpie from "./features/Dashboard.jsx/Dashboardpie";
+import VerifiedList from "./features/verifieddata/VerifiedList";
+import RejectedList from "./features/rejecteddata/RejectedList";
 
 const App = () => {
   // const { userType, loading } = useUser();
@@ -43,7 +45,7 @@ const App = () => {
           </ProtectedPage>
         }
       >
-        {userType === "SuperAdmin" ? (
+        {userType === "Super Admin" ? (
           <Route index element={<SubAdminList />} />
         ) : (
           <Route index element={<NotVerifiedUserIndustrialList />} />
@@ -111,6 +113,21 @@ const App = () => {
             <UserList />
           </ProtectedPage>
         } />
+
+
+        <Route path="verified" element={
+          <ProtectedPage>
+            <VerifiedList />
+          </ProtectedPage>
+        } />
+
+
+      <Route path="rejected" element={
+          <ProtectedPage>
+            <RejectedList />
+          </ProtectedPage>
+        } />
+
 
         <Route path="dashboard" element={
           <ProtectedPage>

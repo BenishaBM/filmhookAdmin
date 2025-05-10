@@ -3,7 +3,7 @@ import refreshToken from "./refreshToken";
 
 // Create an axios instance
 const privateAPI = axios.create({
-  baseURL: "https://filmhook.annularprojects.com/filmhook-0.1",
+  baseURL: "https://www.filmhooks.annulartech.net",
 });
 
 // Add request interceptor to attach JWT token to request headers

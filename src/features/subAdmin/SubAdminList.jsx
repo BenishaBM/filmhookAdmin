@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSubAdminListAction, deleteSubadminAction, changeSubadminActiveStatusAction } from "../../redux/slices/subAdminSlice";
 import Pagination from "../../component/Pagination";
 
-const TABLE_HEAD = ["S.No", "Name", "Email", "Status", "", ""];
+const TABLE_HEAD = ["S.No", "Name", "Email","Emp Id", "Status", "", ""];
 
 const SubAdminList = () => {
   const dispatch = useDispatch();
@@ -134,6 +134,12 @@ const SubAdminList = () => {
                       <td className={classes}>
                         <Typography variant="small" color="blue-gray" className="font-normal">
                           {item.email}
+                        </Typography>
+                      </td>
+
+                      <td className={classes}>
+                        <Typography variant="small" color="blue-gray" className="font-normal">
+                          {item.empId}
                         </Typography>
                       </td>
                       <td className={classes}>

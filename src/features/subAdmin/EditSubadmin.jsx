@@ -53,6 +53,7 @@ const EditSubadmin = () => {
   const initialValues = {
     username: userDetails.name,
     email: userDetails.email,
+    empId: userDetails.empId,
     password: "",
   };
 
@@ -60,8 +61,9 @@ const EditSubadmin = () => {
     const details = {
       userId: userId, // The ID of the user you want to update
       name: values.username,
+      empId:values.empId,
       email: values.email,
-      userType: "SubAdmin",
+      userType: "Sub Admin",
       password: values.password,
     };
 
@@ -101,6 +103,26 @@ const EditSubadmin = () => {
                 />
                 <ErrorMessage
                   name="username"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+              <div className="my-2">
+                <label
+                  htmlFor="empId"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Emp Id*
+                </label>
+                <Field
+                  type="text"
+                  id="empId"
+                  name="empId"
+                  placeholder="Enter your name"
+                  className="mt-1 p-2 w-full border rounded-md"
+                />
+                <ErrorMessage
+                  name="empId"
                   component="div"
                   className="text-red-500 text-sm"
                 />
