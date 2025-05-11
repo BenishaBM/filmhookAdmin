@@ -362,7 +362,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="h-screen w-96 bg-white shadow-lg flex flex-col overflow-y-auto">
+    <div className="h-screen w-72 bg-white shadow-lg flex flex-col overflow-y-auto">
       {/* Logo section with gradient background */}
       <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-6">
         <div className="flex flex-col">
