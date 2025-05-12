@@ -557,7 +557,7 @@ const UnverfiedUserDetailsData = ({ userId }) => {
       );
       
       if (!response.ok) {
-        throw new Error('Failed to fetch user files');
+        // throw new Error('Failed to fetch user files');
       }
       
       const result = await response.json();
@@ -566,11 +566,11 @@ const UnverfiedUserDetailsData = ({ userId }) => {
         setUnverifiedUserFiles(result.data || []);
         console.log("Files fetched successfully:", result.data);
       } else {
-        throw new Error(result.message || 'Failed to fetch user files');
+        // throw new Error(result.message || 'Failed to fetch user files');
       }
     } catch (err) {
       setUnverifiedUserFilesErrorMessage(err.message);
-      toast.error("Error fetching user files");
+    //   toast.error("Error fetching user files");
       console.error("Error fetching files:", err);
     } finally {
       setUnverifiedUserFilesLoadingStatus(false);
@@ -756,10 +756,10 @@ const handleGovermentidDialog = () => {
               <h1 className="text-2xl font-bold text-gray-800">
                 {unverifiedIndestiraluserDetails?.userInfo?.name || "User Profile"}
               </h1>
-              <p className="text-gray-500">Unverified Industrial User</p>
+              {/* <p className="text-gray-500">Unverified Industrial User</p> */}
             </div>
             <div className="flex-grow"></div>
-            <div className="mt-6 md:mt-0 flex space-x-3">
+            {/* <div className="mt-6 md:mt-0 flex space-x-3">
               <button onClick={handleOpenReviewBox} className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-200 flex items-center shadow-md">
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
@@ -772,7 +772,7 @@ const handleGovermentidDialog = () => {
                 </svg>
                 Reject
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
