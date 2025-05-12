@@ -131,6 +131,10 @@ const Userinfo = () => {
                 {userInfo.createdOn ? new Date(userInfo.createdOn).toLocaleDateString() : "N/A"}
               </div>
             </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="font-medium">Reference Code</div>
+              <div className="col-span-2 text-gray-700">{userInfo.refCode || "N/A"}</div>
+            </div>
             
             <div className="grid grid-cols-3 gap-4">
               <div className="font-medium">Verification Status</div>

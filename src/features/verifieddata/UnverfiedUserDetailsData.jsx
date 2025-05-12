@@ -798,6 +798,17 @@ const handleGovermentidDialog = () => {
             </svg>
             Professionals
           </button>
+
+          
+          <button
+            className={`px-6 py-4 flex items-center whitespace-nowrap ${activeTab === 'referenceCode' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'}`}
+            onClick={() => setActiveTab('referenceCode')}
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            Reference Code
+          </button>
    
           <button
             className={`px-6 py-4 flex items-center whitespace-nowrap ${activeTab === 'documents' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'}`}
@@ -817,18 +828,7 @@ const handleGovermentidDialog = () => {
             </svg>
             One-Minute Video {fileCounts.oneMinuteVideo > 0 && <span className="ml-1 bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded">{fileCounts.oneMinuteVideo}</span>}
           </button>
-          {/* <button
-            className={`px-6 py-4 flex items-center whitespace-nowrap ${activeTab === 'profession' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'}`}
-            onClick={() => setActiveTab('profession')}
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-            </svg>
-            Professionals
-          </button> */}
-   
-
-
+          
           <button
             className={`px-6 py-4 flex items-center ${activeTab === 'profile' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500'}`}
             onClick={() => setActiveTab('govermentId')}
@@ -1021,6 +1021,62 @@ const handleGovermentidDialog = () => {
         </div>
       </div>
 
+
+
+
+      {activeTab === 'referenceCode' && (
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center mb-6">
+                <div className="w-12 h-12 flex items-center justify-center bg-blue-100 rounded-lg mr-4">
+                  <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-800">Reference Code</h2>
+                  <p className="text-gray-500 text-sm">User's unique reference code for referrals</p>
+                </div>
+              </div>
+              
+              {getDetailsLoadingStatus === "loading" ? (
+                <div className="flex justify-center items-center h-32">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+                </div>
+              ) : getDetailsErrorMessage ? (
+                <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg">
+                  <p className="font-medium">Error loading reference code</p>
+                  <p>{getDetailsErrorMessage}</p>
+                </div>
+              ) : (
+                <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                  <div className="flex flex-col">
+                    <div className="mb-4">
+                      <h3 className="text-sm font-medium text-gray-500 mb-1">Reference Code</h3>
+                      <div className="flex items-center">
+                        <span className="text-xl font-bold text-blue-600 mr-3">{unverifiedIndestiraluserDetails?.userInfo?.refCode || "No reference code available"}</span>
+                        {unverifiedIndestiraluserDetails?.userInfo?.refCode && (
+                          <button 
+                            onClick={() => {
+                              navigator.clipboard.writeText(unverifiedIndestiraluserDetails.userInfo.refCode);
+                              toast.success("Reference code copied to clipboard");
+                            }}
+                            className="p-2 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 transition-colors"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+
+
       {/* File Preview Dialogs */}
       {fileType === "video" && (
         <DialogBox
@@ -1038,7 +1094,7 @@ const handleGovermentidDialog = () => {
         />
       )}
 
-{fileType === "govermentId" && (
+    {fileType === "govermentId" && (
         <ImageDialog
           openDialogBox={openDialogBox}
           setopenDialogBox={setopenDialogBox}
