@@ -739,7 +739,7 @@ const handleGovermentidDialog = () => {
 
       {/* Header Card */}
       <div className="bg-white rounded-xl shadow-md mb-6 overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 h-32"></div>
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 h-32 "></div>
         <div className="px-6 pb-6 relative">
           <div className="flex flex-col md:flex-row items-center md:items-end">
             <div className="-mt-16 relative">

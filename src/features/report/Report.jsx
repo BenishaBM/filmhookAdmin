@@ -592,6 +592,8 @@ const Report = () => {
     posts: report.postWebModel.postFiles,
     postId: report.postWebModel.id,
     description: report.postWebModel.description,
+    userId: report.postWebModel.userId,
+    userName: report.postWebModel.userName,
     // reportCount: report.reportUserIdCount,
     reportCount : report.reportUserIds[0].reportCount
 
@@ -712,9 +714,7 @@ const Report = () => {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Reports
           </h1>
-          {/* <p className="mt-2 text-gray-600">
-            Review and manage reported content
-          </p> */}
+         
         </div>
 
         {/* Main Card */}
@@ -911,10 +911,18 @@ const Report = () => {
                     Post Images ({selectedPost.posts?.length || 0})
                   </Typography>
 
+                  <Typography variant="paragraph" className="bg-white p-3 rounded-md">
+                     UserId: {selectedPost.userId}
+                    </Typography>
+
+                    <Typography variant="paragraph" className="bg-white p-3 rounded-md">
+                     UserName: {selectedPost.userName}
+                    </Typography>
+
                   {selectedPost.posts && selectedPost.posts.length > 0 ? (
                     <div className="relative">
                       {/* Carousel container */}
-                      <div className="h-64 w-full relative">
+                      <div className="h-64 w-full relative border border-green-900">
                         <img
                           className="h-full w-full object-contain rounded-lg"
                           src={selectedPost.posts[currentImageIndex].filePath}
@@ -976,7 +984,7 @@ const Report = () => {
                     Reported By
                   </Typography>
 
-                  <div className="overflow-y-auto">
+                  <div className="overflow-y-auto border border-red-900">
                     <table className="w-full min-w-max table-auto text-left">
                       <thead>
                         <tr>
@@ -1025,7 +1033,7 @@ const Report = () => {
                     </table>
                   </div>
 
-                  <div className="mt-6">
+                  <div className="mt-6   border border-red-900 ">
                     <Typography variant="h6" className="mb-2">Post Description</Typography>
                     <Typography variant="paragraph" className="bg-white p-3 rounded-md">
                       {selectedPost.description}

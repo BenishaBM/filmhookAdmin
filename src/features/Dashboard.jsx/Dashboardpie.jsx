@@ -1332,15 +1332,7 @@
 
 
 
-
-
-
-
-
-
-
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Calendar, ChevronDown, AlertCircle, X } from 'lucide-react';
 import { 
   BarChart, 
@@ -1357,13 +1349,25 @@ import {
   Legend, 
   ResponsiveContainer 
 } from 'recharts';
+
 import UserTable from './UserTable'; // General User Table component
 import UserTypeTable from './UserTypeTable'; // Component for user type filtering
 import PaymentStatusTable from './PaymentStatusTable'; // New component for payment status details
+import CanvasJSReact from '@canvasjs/react-stockcharts';
+var CanvasJSStockChart = CanvasJSReact.CanvasJSStockChart;
 
 const Dashboardpie = () => {
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+
+  const convertToInputDate=(ddmmyyyy)=>{
+    const [day, month, year] = ddmmyyyy.split("-");
+    return `${year}-${month}-${day}`
+  }
+
+  const startDay="01-02-2024";
+  const today=new Date().toISOString().split("T")[0];
+
+  const [startDate, setStartDate] = useState(convertToInputDate(startDay));
+  const [endDate, setEndDate] = useState(today);
   const [userData, setUserData] = useState(null);
   const [postData, setPostData] = useState(null);
   const [paymentData, setPaymentData] = useState(null);
@@ -1373,6 +1377,7 @@ const Dashboardpie = () => {
   const [showUserTable, setShowUserTable] = useState(false); // General user table
   const [selectedUserType, setSelectedUserType] = useState(null); // To track which user type is selected
   const [selectedPaymentStatus, setSelectedPaymentStatus] = useState(null); // To track which payment status is selected
+
 
   // Colors for charts
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
@@ -1402,6 +1407,30 @@ const Dashboardpie = () => {
       { name: 'EXPIRED', value: data.EXPIRED || 0, status: 'EXPIRED' },
       { name: 'PENDING', value: data.PENDING || 0, status: 'PENDING' }
     ];
+  };
+
+  // Sample data for line chart (replacing candlestick chart)
+  const formatLineChartData = (userData) => {
+    if (!userData) return [];
+    
+    // Generate sample time series data based on user counts
+    const days = 7;
+    const data = [];
+    const baseIndustry = userData.industryUserCount || 0;
+    const basePublic = userData.publicUserCount || 0;
+    
+    for (let i = 0; i < days; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - (days - 1 - i));
+      
+      data.push({
+        date: date.toLocaleDateString(),
+        'Industry Users': Math.max(0, baseIndustry + Math.floor(Math.random() * 10) - 5),
+        'Public Users': Math.max(0, basePublic + Math.floor(Math.random() * 10) - 5),
+      });
+    }
+    
+    return data;
   };
 
   // Get auth token from localStorage
@@ -1559,12 +1588,15 @@ const Dashboardpie = () => {
     }
   };
 
+
   // Custom label function that only shows values without text
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, value }) => {
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+
 
     return (
       <text 
@@ -1578,6 +1610,96 @@ const Dashboardpie = () => {
       </text>
     );
   };
+
+
+
+const formattedStockData0 = [];
+const formattedStockData1 = [];
+
+let candleIndex = 0;
+
+formatUserData(userData).forEach((entry, index) => {
+  const count = entry.value;
+
+  for (let i = 0; i < count; i++) {
+    const date = new Date(startDate);
+    date.setDate(date.getDate() + candleIndex);
+
+    const base = 50 + Math.floor(Math.random() * 10);
+
+    const candle = {
+      x: date,
+      y: [base - 1, base + 2, base - 3, base]
+    };
+
+    if (index === 0) {
+      formattedStockData0.push(candle);
+    } else {
+      formattedStockData1.push(candle);
+    }
+
+    candleIndex++;
+  }
+});
+
+
+
+
+const options = {
+  theme: "light3",
+    rangeSelector: {
+    enabled: false // Hides the range selector (1D, 1W, 1M, etc.)
+  },
+  // navigator: {
+  //   slider: {
+  //     enabled: false // Hides the date range inputs ("From" and "To")
+  //   }
+  // },
+  charts: [{
+    // axisY: {
+    //   title: "Users",
+    //   // maximum: 140 // Slightly above 135 for spacing
+    // },
+    data: [
+      {
+        type: "candlestick",
+        name: "Group 0",
+        dataPoints: formattedStockData0,
+        risingColor: "green",
+        fallingColor: "darkgreen",
+        toolTipContent: "Industry User: {y[3]}"
+      },
+      {
+        type: "candlestick",
+        name: "Group 1",
+        dataPoints: formattedStockData1,
+        risingColor: "red",
+        fallingColor: "darkred",
+        toolTipContent: "Public User: {y[3]}"
+      }
+    ]
+  }],
+  navigator: {
+    height: 0,
+    slider: {
+      minimum: null,
+      maximum: null
+    },
+    axisX: {
+      labelFormatter: () => ""
+    },
+    axisY: {
+      labelFormatter: () => ""
+    }
+  }
+};
+
+const containerProps = {
+  width: "100%",
+  height: "250px",
+  margin: "auto"
+};
+
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -1661,11 +1783,68 @@ const Dashboardpie = () => {
       {/* Charts Section */}
       {!loading && !error && !authError && (startDate && endDate) && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* User Data Chart */}
+          {/* User Data Chart - Replaced Candlestick with Line Chart */}
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold mb-2 text-gray-800">User Distribution</h3>
+            <h3 className="text-lg font-semibold mb-2 text-gray-800">User Distribution Over Time</h3>
             <div className="text-sm text-gray-500 mb-4">
               Total Users: {userData?.totalUserCount || 0}
+            </div>
+            
+            <div className="h-64">
+              <div>
+                <CanvasJSStockChart containerProps={containerProps} options={options}/>
+              </div>
+
+              <div className="flex justify-center mt-4 flex-wrap gap-4">
+              <div className="flex items-center">
+                <div className="w-4 h-4 bg-green-900 mr-2"></div>
+                <span className="text-sm">Industry Users</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-4 h-4 bg-red-500 mr-2"></div>
+                <span className="text-sm">Public Users</span>
+              </div>
+            </div>
+              {/* <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={formatLineChartData(userData)}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line 
+                    type="monotone" 
+                    dataKey="Industry Users" 
+                    stroke="#0088FE" 
+                    strokeWidth={2}
+                    dot={{ fill: '#0088FE' }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="Public Users" 
+                    stroke="#00C49F" 
+                    strokeWidth={2}
+                    dot={{ fill: '#00C49F' }}
+                  />
+                </LineChart>
+              </ResponsiveContainer> */}
+            </div>
+
+            <div className="text-center mt-10">
+              <button
+                onClick={handleUserChartClick}
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                {showUserTable ? 'Hide All Users' : 'Show All Users'}
+              </button>
+            </div>
+          </div>
+
+          {/* User Type Pie Chart */}
+          {/* <div className="bg-white p-4 rounded-lg shadow-md"> */}
+            {/* <h3 className="text-lg font-semibold mb-2 text-gray-800">User Types</h3>
+            <div className="text-sm text-gray-500 mb-4">
+              Distribution by User Type
             </div>
             
             <div className="h-64">
@@ -1694,10 +1873,10 @@ const Dashboardpie = () => {
                   <Tooltip />
                 </PieChart>
               </ResponsiveContainer>
-            </div>
+            </div> */}
 
             {/* Color Legend for User Chart */}
-            <div className="flex justify-center mt-4 flex-wrap gap-4">
+            {/* <div className="flex justify-center mt-4 flex-wrap gap-4">
               <div className="flex items-center">
                 <div className="w-4 h-4 bg-blue-500 mr-2"></div>
                 <span className="text-sm">Industry Users</span>
@@ -1706,17 +1885,8 @@ const Dashboardpie = () => {
                 <div className="w-4 h-4 bg-green-500 mr-2"></div>
                 <span className="text-sm">Public Users</span>
               </div>
-            </div>
-
-            <div className="text-center mt-4">
-              <button
-                onClick={handleUserChartClick}
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-              >
-                {showUserTable ? 'Hide All Users' : 'Show All Users'}
-              </button>
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
 
           {/* Posts Data Chart */}
           <div className="bg-white p-4 rounded-lg shadow-md">
@@ -1733,7 +1903,7 @@ const Dashboardpie = () => {
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
-                  <YAxis />
+                  <YAxis/>
                   <Tooltip />
                   <Bar dataKey="value" fill="#8884d8" />
                 </BarChart>
@@ -1744,7 +1914,7 @@ const Dashboardpie = () => {
             <div className="flex justify-center mt-4">
               <div className="flex items-center">
                 <div className="w-4 h-4 bg-purple-500 mr-2"></div>
-                <span className="text-sm">value</span>
+                <span className="text-sm">Count</span>
               </div>
             </div>
           </div>

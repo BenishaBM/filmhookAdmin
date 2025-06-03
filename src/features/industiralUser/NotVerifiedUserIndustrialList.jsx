@@ -301,7 +301,10 @@ const NotVerifiedUserIndustrialList = () => {
           </CardHeader>
 
           <CardBody className="overflow-y-auto px-0">
-            {getListLoadingStatus === "loading" && <div className="text-center py-4">Loading...</div>}
+            {getListLoadingStatus === "loading" && <div className="flex items-center justify-center h-screen  mb-36">
+  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+</div>
+}
             {getListErrorMessage && <div className="text-center text-red-500 py-4">Error While Loading Data</div>}
             
             <table className="w-full min-w-max table-auto text-left">

@@ -475,6 +475,26 @@ export default function Sidebar() {
               <span>SubAdmin Details</span>
             </div>
           </Link>
+
+          {/* Publick User Management Link */}
+          <Link to="/layout/public_user">
+            <div className={getMenuItemClasses("/layout/public_user")}>
+              <div className="p-1 bg-purple-100 rounded text-purple-800">
+                <UsersIcon className="h-4 w-4" />
+              </div>
+              <span>Public User Details</span>
+            </div>
+          </Link>
+
+          {/* Private User Management Link */}
+          <Link to="/layout/private_user">
+            <div className={getMenuItemClasses("/layout/private_user")}>
+              <div className="p-1 bg-purple-100 rounded text-purple-800">
+                <UsersIcon className="h-4 w-4" />
+              </div>
+              <span>Private User Details</span>
+            </div>
+          </Link>
         </nav>
       </div>
 

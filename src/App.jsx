@@ -18,6 +18,8 @@ import UserList from "./features/industiralUser/UserList";
 import Dashboardpie from "./features/Dashboard.jsx/Dashboardpie";
 import VerifiedList from "./features/verifieddata/VerifiedList";
 import RejectedList from "./features/rejecteddata/RejectedList";
+import PublicUser from "./features/PublicUser/PublicUser";
+import PrivateUser from "./features/PrivateUser/PrivateUser";
 
 const App = () => {
   // const { userType, loading } = useUser();
@@ -48,7 +50,8 @@ const App = () => {
         {userType === "Super Admin" ? (
           <Route index element={<SubAdminList />} />
         ) : (
-          <Route index element={<NotVerifiedUserIndustrialList />} />
+          <Route index element={<Dashboardpie/>} />
+          // <Route index element={<NotVerifiedUserIndustrialList />} />
         )}
 
         <Route
@@ -111,9 +114,21 @@ const App = () => {
         <Route path="user_list" element={
           <ProtectedPage>
             <UserList />
+            
           </ProtectedPage>
         } />
 
+        <Route path="public_user" element={
+          <ProtectedPage>
+            <PublicUser/>
+          </ProtectedPage>
+        } />
+
+        <Route path="private_user" element={
+          <ProtectedPage>
+            <PrivateUser/>
+          </ProtectedPage>
+        } />
 
         <Route path="verified" element={
           <ProtectedPage>
