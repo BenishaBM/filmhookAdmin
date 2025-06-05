@@ -1667,7 +1667,8 @@ const options = {
         dataPoints: formattedStockData0,
         risingColor: "green",
         fallingColor: "darkgreen",
-        toolTipContent: "Industry User: {y[3]}"
+        toolTipContent: "Industry User: {y[3]}",
+        click: (e) => handlePieClick({ userType: 'Industry User' }, 0)
       },
       {
         type: "candlestick",
@@ -1675,7 +1676,8 @@ const options = {
         dataPoints: formattedStockData1,
         risingColor: "red",
         fallingColor: "darkred",
-        toolTipContent: "Public User: {y[3]}"
+        toolTipContent: "Public User: {y[3]}",
+        click: (e) => handlePieClick({ userType: 'Public User' }, 1)
       }
     ]
   }],
@@ -1703,7 +1705,9 @@ const containerProps = {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">Analytics Dashboard</h1>
+      <h1 className="text-4xl font-bold bg-gradient-to-r mb-6 from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        Analytics Dashboard
+      </h1>
       
       {/* Authentication Error */}
       {authError && (
@@ -1785,7 +1789,7 @@ const containerProps = {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* User Data Chart - Replaced Candlestick with Line Chart */}
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="text-lg font-semibold mb-2 text-gray-800">User Distribution Over Time</h3>
+            <h3 className="text-lg font-semibold mb-2 text-gray-800">User Distribution</h3>
             <div className="text-sm text-gray-500 mb-4">
               Total Users: {userData?.totalUserCount || 0}
             </div>
@@ -1795,16 +1799,16 @@ const containerProps = {
                 <CanvasJSStockChart containerProps={containerProps} options={options}/>
               </div>
 
-              <div className="flex justify-center mt-4 flex-wrap gap-4">
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-green-900 mr-2"></div>
-                <span className="text-sm">Industry Users</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-red-500 mr-2"></div>
-                <span className="text-sm">Public Users</span>
-              </div>
-            </div>
+              {/* <div className="flex justify-center mt-4 flex-wrap gap-4">
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-green-900 mr-2"></div>
+                  <span className="text-sm">Industry Users</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-red-500 mr-2"></div>
+                  <span className="text-sm">Public Users</span>
+                </div>
+              </div> */}
               {/* <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={formatLineChartData(userData)}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -1829,8 +1833,17 @@ const containerProps = {
                 </LineChart>
               </ResponsiveContainer> */}
             </div>
-
-            <div className="text-center mt-10">
+            <div className="flex justify-center mt-4 flex-wrap gap-4">
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-green-900 mr-2"></div>
+                  <span className="text-sm">Industry Users</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-4 h-4 bg-red-500 mr-2"></div>
+                  <span className="text-sm">Public Users</span>
+                </div>
+              </div>
+            <div className="text-center mt-4">
               <button
                 onClick={handleUserChartClick}
                 className="text-blue-600 hover:text-blue-800 text-sm font-medium"
@@ -1838,6 +1851,7 @@ const containerProps = {
                 {showUserTable ? 'Hide All Users' : 'Show All Users'}
               </button>
             </div>
+
           </div>
 
           {/* User Type Pie Chart */}

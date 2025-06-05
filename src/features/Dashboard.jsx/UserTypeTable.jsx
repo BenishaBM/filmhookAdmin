@@ -1229,6 +1229,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, AlertCircle, X, Search } from 'lucide-react';
 import UnverfiedUserDetailsData from '../verifieddata/UnverfiedUserDetailsData';
 import UnverfiedUserTable from './UnverfiedUserTable';
+import { Eye } from 'lucide-react';
 
 const UserTypeTable = ({ userType, startDate, endDate, onClose }) => {
   const [users, setUsers] = useState([]);
@@ -1388,9 +1389,11 @@ const UserTypeTable = ({ userType, startDate, endDate, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-6xl max-h-[90vh] overflow-hidden">
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-semibold">{userType} Data</h2>
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-screen overflow-hidden">
+        <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            {userType} Data
+          </h2>
           <div className="flex items-center">
             {!loading && !error && !authError && users.length > 0 && !showUserDetails && (
               <div className="relative mr-4 w-64">
@@ -1421,11 +1424,35 @@ const UserTypeTable = ({ userType, startDate, endDate, onClose }) => {
                 )}
               </div>
             )}
-            <button 
+            {/* <button 
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 focus:outline-none"
             >
               <X size={24} />
+            </button> */}
+            <button
+              onClick={onClose}
+              // className="absolute top-8 right-6 z-10 px-4 py-2 bg-transparent text-white rounded-lg hover:bg-blue-700 transition flex items-center"
+              className="z-10 w-12 h-12 text-blue-300 rounded-full hover:text-blue-700 transition flex items-center justify-center"
+            >
+              <span className="hover:scale-125">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
+              </span>
+
+              {/* Close */}
             </button>
           </div>
         </div>
@@ -1481,22 +1508,33 @@ const UserTypeTable = ({ userType, startDate, endDate, onClose }) => {
               <div className="overflow-x-auto">
                 <table className="min-w-full bg-white rounded-lg overflow-hidden">
                   <thead className="bg-gray-100">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">ID</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Name</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Email</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Phone</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Gender</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">DOB</th>
-                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Country</th>
+                    <tr className='bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg'>
+                      {/* <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 text-white whitespace-nowrap">ID</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 text-white whitespace-nowrap">Name</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 text-white whitespace-nowrap">Email</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 text-white whitespace-nowrap">Phone</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 text-white whitespace-nowrap">Gender</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 text-white whitespace-nowrap">DOB</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 text-white whitespace-nowrap">Country</th>
+                      <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 text-white whitespace-nowrap">Action</th> */}
+                      {["ID","Name","Email","Phone","Gender","DOB","Country","Action"].map((title)=>(
+                        <th
+                          key={title}
+                          className="py-3 px-4 text-left font-medium text-white whitespace-nowrap z-10"
+                        >
+                          {title}
+                        </th>
+                      ))
+                      
+                      }
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {filteredUsers.map((user) => (
                       <tr 
                         key={user.userId} 
-                        className="hover:bg-gray-50 cursor-pointer" 
-                        onClick={() => handleUserSelect(user.userId)}
+                        className="hover:bg-gray-50 [&:nth-child(even)]:bg-gray-100" 
+                        // onClick={() => handleUserSelect(user.userId)}
                       >
                         <td className="px-4 py-3 text-sm text-gray-700">{user.userId}</td>
                         <td className="px-4 py-3 text-sm text-gray-700">{user.name}</td>
@@ -1505,6 +1543,16 @@ const UserTypeTable = ({ userType, startDate, endDate, onClose }) => {
                         <td className="px-4 py-3 text-sm text-gray-700 capitalize">{user.gender}</td>
                         <td className="px-4 py-3 text-sm text-gray-700">{user.dob}</td>
                         <td className="px-4 py-3 text-sm text-gray-700">{user.country || '-'}</td>
+                        <td className="py-3 px-4">
+                          <button
+                            // onClick={() => handleViewDetails(user.userId)}
+                            onClick={() => handleUserSelect(user.userId)}
+                            className="flex items-center px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition cursor-pointer"
+                          >
+                            <Eye size={16} className="mr-1" />
+                            View Details
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -1516,9 +1564,17 @@ const UserTypeTable = ({ userType, startDate, endDate, onClose }) => {
                   <p className="text-gray-600">No users found matching "{searchTerm}"</p>
                 </div>
               )}
-              
-              {/* New Pagination Component */}
-              {!searchTerm && (
+            </>
+          )}
+        </div>
+          
+          {!loading && !error && !authError && users.length === 0 && !showUserDetails && (
+            <div className="text-center py-8">
+              <p className="text-gray-600">No {userType} data found for the selected date range.</p>
+            </div>
+          )}
+        {/* New Pagination Component */}
+        {!searchTerm && (
                 <div className="flex justify-between items-center border-t border-blue-gray-50 p-4 mt-1">
                   <div className="text-sm text-gray-600 font-normal">
                     {t.showingPage} {currentPage} {t.of} {Math.ceil(totalUsers / pageSize)}
@@ -1560,15 +1616,6 @@ const UserTypeTable = ({ userType, startDate, endDate, onClose }) => {
                   </div>
                 </div>
               )}
-            </>
-          )}
-          
-          {!loading && !error && !authError && users.length === 0 && !showUserDetails && (
-            <div className="text-center py-8">
-              <p className="text-gray-600">No {userType} data found for the selected date range.</p>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );

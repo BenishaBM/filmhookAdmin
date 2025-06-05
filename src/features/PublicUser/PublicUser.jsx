@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
-import UnverfiedUserDetailsData from "../verifieddata/UnverfiedUserDetailsData";
+import { Eye } from "lucide-react";
+// import UnverfiedUserDetailsData from "../verifieddata/UnverfiedUserDetailsData";
+import UnverfiedUserTable from "../Dashboard.jsx/UnverfiedUserTable";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 const PublicUser = () => {
   const [users, setUsers] = useState([]);
@@ -11,6 +14,8 @@ const PublicUser = () => {
   const [pageSize, setPageSize] = useState(10);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
   const [selectKey, setSelectKey] = useState(Date.now());
 
   const fetchData = async (page = 1, size = 10) => {
@@ -37,11 +42,13 @@ const PublicUser = () => {
       }
 
       const result = await response.json();
+      console.log(result.data);
 
       if (result.status === 1) {
         setUsers(result.data.users);
+        setPageInfo(result.data);
         // setPageInfo(result.data.PageInfo);
-        setPageInfo(result.data.PageInfo || { totalPages: 0, totalRecords: 0 });
+        // setPageInfo(result.data.PageInfo || { totalPages: 0, totalRecords: 0 });
       } else {
         throw new Error(result.message || "Failed to fetch data");
       }
@@ -58,10 +65,15 @@ const PublicUser = () => {
 
   // console.log(users);
 
-  //     const handleBackToList = () => {
-  //     setShowDetails(false);
-  //     setSelectedUser(null);
-  //   };
+  const handleViewDetails = (user) => {
+    setSelectedUser(user);
+    setShowDetails(true);
+  };
+
+  const handleBackToList = () => {
+    setShowDetails(false);
+    setSelectedUser(null);
+  };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -82,100 +94,188 @@ const PublicUser = () => {
     setSelectKey(Date.now());
   };
 
-  //   if (showDetails && selectedUser) {
-  //     return (
-  //       <div className="relative mt-16">
-  //         <button
-  //           onClick={handleBackToList}
-  //           className="absolute top-4 left-4 z-10 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition flex items-center"
-  //         >
-  //           <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  //             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-  //           </svg>
-  //           Back to List
-  //         </button>
+  if (showDetails && selectedUser) {
+    return (
+      <div className="relative mt-16">
+        <button
+          onClick={handleBackToList}
+          className="absolute top-4 left-4 z-10 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition flex items-center"
+        >
+          <svg
+            className="w-5 h-5 mr-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            ></path>
+          </svg>
+          Back to List
+        </button>
+        <button
+          onClick={handleBackToList}
+          // className="absolute top-8 right-6 z-10 px-4 py-2 bg-transparent text-white rounded-lg hover:bg-blue-700 transition flex items-center"
+          className="absolute top-6 right-6 z-10 w-12 h-12 bg-transparent text-white rounded-full hover:bg-blue-900 transition flex items-center justify-center"
+        >
+          <span className="hover:scale-125">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </span>
 
-  //         <UnverfiedUserDetailsData userId={selectedUser} />
-  //       </div>
-  //     );
-  //   }
+          {/* Close */}
+        </button>
+
+        <UnverfiedUserTable userId={selectedUser} />
+        {/* <UnverfiedUserDetailsData userId={selectedUser} /> */}
+      </div>
+    );
+  }
 
   return (
     <>
-      <div className="p-6 max-w-6xl mx-auto">
-        {/* <h1 className="text-2xl font-bold mb-6">Publist User List</h1> */}
-        <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          Public User List
-        </h1>
-
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
+      <div className="p-1 max-w-6xl mx-auto">
+        <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-screen overflow-hidden">
+          {/* <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-screen overflow-hidden"> */}
+          <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Public User List
+            </h1>
           </div>
-        )}
 
-        {loading ? (
-          <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
-        ) : (
-          <>
-            <div className="bg-white rounded-xl shadow-xl overflow-hidden mb-10 transition-all duration-300 hover:shadow-2xl">
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-                <thead className="bg-gray-50 ">
-                  <tr className="bg-gradient-to-r from-blue-500 to-indigo-600">
-                    <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white">
-                      User ID
-                    </th>
-                    <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white">
-                      Name
-                    </th>
-                    <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white">
-                      Email
-                    </th>
-                    <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white">
-                      Gender
-                    </th>
-                    <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white">
-                      Data of Birth
-                    </th>
-                    <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white">
-                      Phone Number
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.length > 0 ? (
-                    users.map((user, index) => (
-                      <tr
-                        key={user.userId}
-                        className="border-b border-gray-200 hover:bg-gray-50"
-                      >
-                        <td className="py-3 px-4">{user.userId || "NA"}</td>
-                        <td className="py-3 px-4">{user.name || "NA"}</td>
-                        <td className="py-3 px-4">{user.email || "NA"}</td>
-                        <td className="py-3 px-4">{user.gender || "NA"}</td>
-                        <td className="py-3 px-4">{user.dob || "NA"}</td>
-                        <td className="py-3 px-4">
-                          {user.phoneNumber || "NA"}
-                        </td>
+          <div className="p-6 overflow-y-auto max-h-[calc(87vh-120px)]">
+            {/* {authError && (
+                          <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded flex items-center">
+                            <AlertCircle className="mr-2" size={20} />
+                            <div>
+                              <p className="font-medium">Authentication Error</p>
+                              <p>Please log in to access the user data.</p>
+                            </div>
+                            <button 
+                              onClick={handleLogin}
+                              className="ml-auto bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition duration-300"
+                            >
+                              Log In
+                            </button>
+                          </div>
+                        )} */}
+
+            {loading && (
+              <div className="text-center py-8">
+                <p className="text-gray-600">Loading data...</p>
+              </div>
+            )}
+
+            {error && (
+              <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
+                <p>{error}</p>
+              </div>
+            )}
+
+            {!loading && !error && users.length > 0 && (
+              <>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full bg-white rounded-lg overflow-hidden">
+                    {/* <table className="min-w-full bg-white border border-gray-200 rounded-lg"> */}
+                    <thead className="bg-gray-50">
+                      <tr className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg">
+                        {/* <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white whitespace-nowrap">
+                                User ID
+                            </th>
+                            <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white whitespace-nowrap">
+                                Name
+                            </th>
+                            <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white whitespace-nowrap">
+                                Email
+                            </th>
+                            <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white whitespace-nowrap">
+                                Gender
+                            </th>
+                            <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white whitespace-nowrap">
+                                Data of Birth
+                            </th>
+                            <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white whitespace-nowrap">
+                                Phone Number
+                            </th>
+                            <th className="py-3 px-4 text-left font-medium text-gray-700 border-b text-white whitespace-nowrap">
+                                Actions
+                            </th> */}
+                        {[
+                          "User ID",
+                          "Name",
+                          "Email",
+                          "Gender",
+                          "Date of Birth",
+                          "Phone Number",
+                          "Actions",
+                        ].map((title) => (
+                          <th
+                            key={title}
+                            className="py-3 px-4 text-left font-medium text-white whitespace-nowrap z-10"
+                            // className="py-3 px-4 text-left font-medium text-white whitespace-nowrap bg-gradient-to-r from-blue-500 to-indigo-600 z-10"
+                          >
+                            {title}
+                          </th>
+                        ))}
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan="4"
-                        className="py-6 text-center text-gray-500"
-                      >
-                        No data found
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                    </thead>
+                    <tbody>
+                      {users.map((user, index) => (
+                        <tr
+                          key={user.userId}
+                          className="border-b border-gray-200 hover:bg-gray-50 [&:nth-child(odd)]:bg-gray-100"
+                        >
+                          <td className="py-3 px-4">{user.userId || "NA"}</td>
+                          <td className="py-3 px-4">{user.name || "NA"}</td>
+                          <td className="py-3 px-4">{user.email || "NA"}</td>
+                          <td className="py-3 px-4">{user.gender || "NA"}</td>
+                          <td className="py-3 px-4">{user.dob || "NA"}</td>
+                          <td className="py-3 px-4">
+                            {user.phoneNumber || "NA"}
+                          </td>
+                          <td className="py-3 px-4">
+                            <button
+                              onClick={() => handleViewDetails(user.userId)}
+                              className="flex items-center px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition whitespace-nowrap"
+                            >
+                              <Eye size={16} className="mr-1" />
+                              View Details
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
 
+          {loading && error && (
+            <div className="text-center py-8">
+              <p className="text-gray-600">
+                No data found for the selected date range.
+              </p>
+            </div>
+          )}
+          {/* New Pagination Component */}
+          {!loading && (
             <div className="flex justify-between items-center p-4 mt-4">
               <div className="text-sm text-gray-600">
                 Showing Page {currentPage} of {pageInfo.totalPages || 1}
@@ -226,10 +326,8 @@ const PublicUser = () => {
                 </button>
               </div>
             </div>
-          </div>
-
-          </>
-        )}
+          )}
+        </div>
       </div>
     </>
   );

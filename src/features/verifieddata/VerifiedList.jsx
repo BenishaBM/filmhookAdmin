@@ -728,6 +728,19 @@ const VerifiedList = () => {
           </svg>
           Back to List
         </button>
+        <button 
+          onClick={handleBackToList}
+          className="absolute top-6 right-6 z-10 w-12 h-12 bg-transparent text-white rounded-full hover:bg-blue-900 transition flex items-center justify-center"
+
+          >
+            <span className="hover:scale-125">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+
+            </span>
+          {/* Back to List */}
+        </button>
         
         <UnverfiedUserDetailsData userId={selectedUser} />
       </div>
@@ -735,109 +748,138 @@ const VerifiedList = () => {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Industry Verified List</h1>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-      
-      {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-        </div>
-      ) : (
-        <>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="py-3 px-4 text-left font-medium text-gray-700 border-b">S.No</th>
-                  <th className="py-3 px-4 text-left font-medium text-gray-700 border-b">Name</th>
-                  <th className="py-3 px-4 text-left font-medium text-gray-700 border-b">Email</th>
-                  <th className="py-3 px-4 text-left font-medium text-gray-700 border-b">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.length > 0 ? (
-                  users.map((user, index) => (
-                    <tr key={user.userId} className="border-b border-gray-200 hover:bg-gray-50">
-                      <td className="py-3 px-4">{(currentPage - 1) * pageSize + index + 1}</td>
-                      <td className="py-3 px-4">{user.name}</td>
-                      <td className="py-3 px-4">{user.email}</td>
-                      <td className="py-3 px-4">
-                        <button
-                          onClick={() => handleViewDetails(user.userId)}
-                          className="flex items-center px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-                        >
-                          <Eye size={16} className="mr-1" />
-                          View Details
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4" className="py-6 text-center text-gray-500">
-                      No data found
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+    <>
+      <div className="p-1 max-w-6xl mx-auto">
+        <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-screen overflow-hidden">
+          <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              Industry Verified List
+            </h1>
           </div>
-          
-          <div className="flex justify-between items-center p-4 mt-4">
-            <div className="text-sm text-gray-600">
-              Showing Page {currentPage} of {pageInfo.totalPages || 1}
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="h-8 flex items-center justify-center rounded border border-gray-300">
-                <select
-                  key={selectKey}
-                  value={pageSize}
-                  onChange={handlePageSizeChange}
-                  className="w-16 h-full text-sm border-0 rounded px-2 focus:ring-0 focus:outline-none"
-                >
-                  {[5, 10, 15, 20, 25].map((size) => (
-                    <option key={size} value={size} className="py-1 text-sm">
-                      {size}
-                    </option>
-                  ))}
-                </select>
+
+          <div className="p-6 overflow-y-auto max-h-[calc(87vh-120px)]">
+            {loading && (
+              <div className="text-center py-8">
+                <p className="text-gray-600">Loading data...</p>
               </div>
-              
-              <button
-                disabled={currentPage === 1}
-                className={`px-4 py-1 rounded border border-gray-300 text-sm ${
-                  currentPage === 1 
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                    : 'bg-white text-black hover:bg-gray-100'
-                }`}
-                onClick={handlePreviousPage}
-              >
-                PREVIOUS
-              </button>
-              
-              <button
-                disabled={currentPage === pageInfo.totalPages || pageInfo.totalPages === 0}
-                className={`px-4 py-1 rounded border border-gray-300 text-sm ${
-                  currentPage === pageInfo.totalPages || pageInfo.totalPages === 0
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                    : 'bg-white text-black hover:bg-gray-100'
-                }`}
-                onClick={handleNextPage}
-              >
-                NEXT
-              </button>
-            </div>
+            )}
+
+            {error && (
+              <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
+                <p>{error}</p>
+              </div>
+            )}
+
+            {!loading && !error && users.length > 0 && (
+              <>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full bg-white rounded-lg overflow-hidden">
+                    <thead className="bg-gray-50">
+                      <tr className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg">
+                        {[
+                          "S.No",
+                          "Name",
+                          "Email",
+                          "Actions",
+                        ].map((title) => (
+                          <th
+                            key={title}
+                            className="py-3 px-4 text-left font-medium text-white whitespace-nowrap z-10">
+                            {title}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map((user, index) => (
+                        <tr
+                          key={user.userId}
+                          className="border-b border-gray-200 hover:bg-gray-50 [&:nth-child(odd)]:bg-gray-100"
+                        >
+                          <td className="py-3 px-4">{(currentPage - 1) * pageSize + index + 1}</td>
+                          <td className="py-3 px-4">{user.name}</td>
+                          <td className="py-3 px-4">{user.email}</td>
+                          <td className="py-3 px-4">
+                            <button
+                              onClick={() => handleViewDetails(user.userId)}
+                              className="flex items-center px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                            >
+                              <Eye size={16} className="mr-1" />
+                              View Details
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
           </div>
-        </>
-      )}
-    </div>
+
+          {loading && error && (
+            <div className="text-center py-8">
+              <p className="text-gray-600">
+                No data found for the selected date range.
+              </p>
+            </div>
+          )}
+          {/* New Pagination Component */}
+          {!loading && (
+            <div className="flex justify-between items-center p-4 mt-4">
+              <div className="text-sm text-gray-600">
+                Showing Page {currentPage} of {pageInfo.totalPages || 1}
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="h-8 flex items-center justify-center rounded border border-gray-300">
+                  <select
+                    key={selectKey}
+                    value={pageSize}
+                    onChange={handlePageSizeChange}
+                    className="w-16 h-full text-sm border-0 rounded px-2 focus:ring-0 focus:outline-none"
+                  >
+                    {[5, 10, 15, 20, 25].map((size) => (
+                      <option key={size} value={size} className="py-1 text-sm">
+                        {size}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <button
+                  disabled={currentPage === 1}
+                  className={`px-4 py-1 rounded border border-gray-300 text-sm ${
+                    currentPage === 1
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-black hover:bg-gray-100"
+                  }`}
+                  onClick={handlePreviousPage}
+                >
+                  PREVIOUS
+                </button>
+
+                <button
+                  disabled={
+                    currentPage === pageInfo.totalPages ||
+                    pageInfo.totalPages === 0
+                  }
+                  className={`px-4 py-1 rounded border border-gray-300 text-sm ${
+                    currentPage === pageInfo.totalPages ||
+                    pageInfo.totalPages === 0
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-black hover:bg-gray-100"
+                  }`}
+                  onClick={handleNextPage}
+                >
+                  NEXT
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 

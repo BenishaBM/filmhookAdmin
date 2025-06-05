@@ -99,7 +99,6 @@
 //           Un verified Industrial User
 //         </Typography>
 
-
 //         <CardBody className="overflow-y-auto px-0">
 //           {getListLoadingStatus === "loading" && <div className="text-center py-4">Loading...</div>}
 //           {getListErrorMessage && <div className="text-center text-red-500 py-4">Error While Loading Data</div>}
@@ -184,22 +183,10 @@
 
 // export default NotVerifiedUserIndustrialList;
 
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUnverifiedIndustrialUserListAction } from "../../redux/slices/notVerifiedIndustrialUserSlice";
-import {
-  MagnifyingGlassIcon,
-  EyeIcon
-} from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, EyeIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import {
   Card,
@@ -210,7 +197,7 @@ import {
   Input,
   Button,
   Select,
-  Option
+  Option,
 } from "@material-tailwind/react";
 
 const NotVerifiedUserIndustrialList = () => {
@@ -273,7 +260,7 @@ const NotVerifiedUserIndustrialList = () => {
     showingPage: "Showing Page",
     of: "of",
     previous: "Previous",
-    next: "Next"
+    next: "Next",
   };
 
   return (
@@ -301,20 +288,22 @@ const NotVerifiedUserIndustrialList = () => {
           </CardHeader>
 
           <CardBody className="overflow-y-auto px-0">
-            {getListLoadingStatus === "loading" && <div className="flex items-center justify-center h-screen  mb-36">
-  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-</div>
-}
-            {getListErrorMessage && <div className="text-center text-red-500 py-4">Error While Loading Data</div>}
-            
+            {getListLoadingStatus === "loading" && (
+              <div className="flex items-center justify-center h-screen  mb-36">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+              </div>
+            )}
+            {getListErrorMessage && (
+              <div className="text-center text-red-500 py-4">
+                Error While Loading Data
+              </div>
+            )}
+
             <table className="w-full min-w-max table-auto text-left">
               <thead>
                 <tr className="bg-blue-500">
                   {TABLE_HEAD.map((head, index) => (
-                    <th
-                      key={index}
-                      className="p-4"
-                    >
+                    <th key={index} className="p-4">
                       <Typography
                         variant="small"
                         color="white"
@@ -353,7 +342,7 @@ const NotVerifiedUserIndustrialList = () => {
                             {item.name}
                           </Typography>
                         </td>
-                        <td className={classes} >
+                        <td className={classes}>
                           <Link
                             to={`/layout/unverified_userdetails/${item.userId}`}
                             className="flex items-center gap-2 bg-blue-700 text-white px-4 py-2 rounded-md w-max"
@@ -367,8 +356,15 @@ const NotVerifiedUserIndustrialList = () => {
                   })
                 ) : (
                   <tr>
-                    <td colSpan={TABLE_HEAD.length} className="px-4 py-8 text-center">
-                      <Typography variant="small" color="blue-gray" className="font-normal">
+                    <td
+                      colSpan={TABLE_HEAD.length}
+                      className="px-4 py-8 text-center"
+                    >
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
                         No data found
                       </Typography>
                     </td>
@@ -379,8 +375,13 @@ const NotVerifiedUserIndustrialList = () => {
           </CardBody>
 
           <CardFooter className="flex justify-between items-center border-t border-blue-gray-50 p-4 mt-1">
-            <Typography variant="small" color="blue-gray" className="font-normal">
-              {t.showingPage} {currentPage} {t.of} {Math.ceil(totalRecords / pageSize)}
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal"
+            >
+              {t.showingPage} {currentPage} {t.of}{" "}
+              {Math.ceil(totalRecords / pageSize)}
             </Typography>
             <div className="flex items-center gap-4">
               <div className="w-18 h-8 flex items-center justify-center rounded-[25px] border border-black">
@@ -394,7 +395,11 @@ const NotVerifiedUserIndustrialList = () => {
                   menuProps={{ className: "z-50 border border-blue-gray-50" }}
                 >
                   {[5, 10, 15, 20, 25].map((size) => (
-                    <Option key={size} value={size.toString()} className="py-1 text-sm">
+                    <Option
+                      key={size}
+                      value={size.toString()}
+                      className="py-1 text-sm"
+                    >
                       {size}
                     </Option>
                   ))}
@@ -427,8 +432,3 @@ const NotVerifiedUserIndustrialList = () => {
 };
 
 export default NotVerifiedUserIndustrialList;
-
-
-
-
-

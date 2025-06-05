@@ -19,7 +19,8 @@ import Dashboardpie from "./features/Dashboard.jsx/Dashboardpie";
 import VerifiedList from "./features/verifieddata/VerifiedList";
 import RejectedList from "./features/rejecteddata/RejectedList";
 import PublicUser from "./features/PublicUser/PublicUser";
-import PrivateUser from "./features/PrivateUser/PrivateUser";
+import IndustryUser from "./features/IndustryUser/IndustryUser";
+import SamplePublic from "./features/PublicUser/SamplePublic";
 
 const App = () => {
   // const { userType, loading } = useUser();
@@ -121,12 +122,13 @@ const App = () => {
         <Route path="public_user" element={
           <ProtectedPage>
             <PublicUser/>
+            {/* <SamplePublic/> */}
           </ProtectedPage>
         } />
 
-        <Route path="private_user" element={
+        <Route path="Industry_user" element={
           <ProtectedPage>
-            <PrivateUser/>
+            <IndustryUser/>
           </ProtectedPage>
         } />
 

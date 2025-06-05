@@ -495,6 +495,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X, Search } from 'lucide-react';
+import { Eye } from 'lucide-react';
 
 const PaymentStatusTable = ({ status, startDate, endDate, onClose }) => {
   const [payments, setPayments] = useState([]);
@@ -637,6 +638,8 @@ const PaymentStatusTable = ({ status, startDate, endDate, onClose }) => {
     }
   };
 
+  const titles=["Payment ID","Transaction ID","Amount","Product","Name","Email","Phone","Post ID","Status"]
+
   return (
     <div 
       className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
@@ -644,9 +647,9 @@ const PaymentStatusTable = ({ status, startDate, endDate, onClose }) => {
     >
       <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-screen overflow-hidden">
         <div className="p-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-gray-800">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
             {status} Payments
-            <span className="ml-2 text-sm font-normal text-gray-500">
+            <span className="ml-2 text-sm font-normal">
               ({pagination.totalItems} total)
             </span>
           </h2>
@@ -660,14 +663,32 @@ const PaymentStatusTable = ({ status, startDate, endDate, onClose }) => {
                 placeholder="Search by name, email, or phone"
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"
+                className="pl-10 pr-4 py-2 border border-gray-300 focus:outline-hidden hover:border-blue-200 rounded-md text-sm"
               />
             </div>
-            <button 
+            <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 focus:outline-none"
+              // className="absolute top-8 right-6 z-10 px-4 py-2 bg-transparent text-white rounded-lg hover:bg-blue-700 transition flex items-center"
+              className="z-10 w-12 h-12 text-blue-300 rounded-full hover:text-blue-700 transition flex items-center justify-center"
             >
-              <X size={20} />
+              <span className="hover:scale-125">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="size-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
+              </span>
+
+              {/* Close */}
             </button>
           </div>
         </div>
@@ -686,11 +707,11 @@ const PaymentStatusTable = ({ status, startDate, endDate, onClose }) => {
               {searchTerm ? 'No results match your search criteria.' : 'No payment data found for the selected status and date range.'}
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment ID</th>
+            <div className="overflow-x-auto p-4">
+              <table className="min-w-full bg-white rounded-lg overflow-hidden">
+                <thead className="bg-gray-100">
+                  <tr className='bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg'>
+                    {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment ID</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction ID</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
@@ -698,12 +719,22 @@ const PaymentStatusTable = ({ status, startDate, endDate, onClose }) => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Post ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th> */}
+                    {
+                      titles.map((title)=>(
+                        <th
+                          key={title}
+                          className='py-3 px-4 text-left font-medium text-white whitespace-nowrap z-10'
+                        >
+                          {title}
+                        </th>
+                      ))
+                    }
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredPayments.map((payment) => (
-                    <tr key={payment.paymentId} className="hover:bg-gray-50">
+                    <tr key={payment.paymentId} className="hover:bg-gray-50 [&:nth-child(even)]:bg-gray-100">
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{payment.paymentId}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{payment.txnid}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{payment.amount}</td>
@@ -717,6 +748,14 @@ const PaymentStatusTable = ({ status, startDate, endDate, onClose }) => {
                           {payment.promotionStatus || status}
                         </span>
                       </td>
+                      {/* <td className="py-3 px-4">
+                        <button
+                          className="flex items-center px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition cursor-pointer whitespace-nowrap"
+                        >
+                          <Eye size={16} className="mr-1" />
+                          View Details
+                        </button>
+                      </td> */}
                     </tr>
                   ))}
                 </tbody>
@@ -732,12 +771,12 @@ const PaymentStatusTable = ({ status, startDate, endDate, onClose }) => {
               Showing page {pagination.currentPage} of {Math.ceil(pagination.totalItems / pagination.pageSize)}
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-18 h-8 flex items-center justify-center rounded-full border border-black">
+              <div className="w-18 h-8 flex items-center justify-center">
                 <select
                   key={selectKey}
                   value={pagination.pageSize.toString()}
                   onChange={handlePageSizeChange}
-                  className="w-full h-full text-sm border-0 focus:ring-0"
+                  className="rounded-full border border-black px-4 py-1 text-sm"
                 >
                   {[5, 10, 15, 20, 25].map((size) => (
                     <option key={size} value={size.toString()} className="py-1 text-sm">
