@@ -182,20 +182,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -242,7 +228,10 @@ const UserList = () => {
             pageSize: pageSize,
         };
         console.log("Dispatching getUserAction with:", pageDetails);
+        // dispatch(getUserAction({pageNo, pageSize}));
         dispatch(getUserAction(pageDetails));
+        // console.log(getUserAction(pageDetails));
+        
     };
 
     const handlePageSizeChange = (e) => {
@@ -300,6 +289,7 @@ const UserList = () => {
                             </thead>
                             <tbody>
                                 {userData && userData.length > 0 ? (
+                                    
                                     userData.map((user, index) => (
                                         <tr
                                             key={user.userId || index}

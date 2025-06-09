@@ -252,6 +252,7 @@ export default function Sidebar() {
   };
 
   const handleLogout = () => {
+    
     const confirmLogout = window.confirm("Are you sure you want to logout?");
     if (confirmLogout) {
       dispatch(userLogout());

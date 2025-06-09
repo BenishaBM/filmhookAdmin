@@ -225,30 +225,38 @@ const IndustryUser = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {users.map((user, index) => (
-                              <tr
-                                key={user.userId}
-                                className="border-b border-gray-200 hover:bg-gray-50 [&:nth-child(odd)]:bg-gray-100"
-                              >
-                                <td className="py-3 px-4">{user.userId || "NA"}</td>
-                                <td className="py-3 px-4">{user.name || "NA"}</td>
-                                <td className="py-3 px-4">{user.email || "NA"}</td>
-                                <td className="py-3 px-4">{user.gender || "NA"}</td>
-                                <td className="py-3 px-4">{user.dob || "NA"}</td>
-                                <td className="py-3 px-4">
-                                  {user.phoneNumber || "NA"}
-                                </td>
-                                <td className="py-3 px-4">
-                                  <button
-                                    onClick={() => handleViewDetails(user.userId)}
-                                    className="flex items-center px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition whitespace-nowrap"
-                                  >
-                                    <Eye size={16} className="mr-1" />
-                                    View Details
-                                  </button>
-                                </td>
-                              </tr>
-                            ))}
+                            {/* {users.length>0 ? ( */}
+                              {users.map((user, index) => (
+                                <tr
+                                  key={user.userId}
+                                  className="border-b border-gray-200 hover:bg-gray-50 [&:nth-child(odd)]:bg-gray-100"
+                                >
+                                  <td className="py-3 px-4">{user.userId || "NA"}</td>
+                                  <td className="py-3 px-4">{user.name || "NA"}</td>
+                                  <td className="py-3 px-4">{user.email || "NA"}</td>
+                                  <td className="py-3 px-4">{user.gender || "NA"}</td>
+                                  <td className="py-3 px-4">{user.dob || "NA"}</td>
+                                  <td className="py-3 px-4">
+                                    {user.phoneNumber || "NA"}
+                                  </td>
+                                  <td className="py-3 px-4">
+                                    <button
+                                      onClick={() => handleViewDetails(user.userId)}
+                                      className="flex items-center px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition whitespace-nowrap"
+                                    >
+                                      <Eye size={16} className="mr-1" />
+                                      View Details
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))
+                              }
+                            {/* ) */}
+                            {/* :
+                             <div>
+                                <p>No data</p>
+                             </div>
+                            } */}
                           </tbody>
                         </table>
                       </div>

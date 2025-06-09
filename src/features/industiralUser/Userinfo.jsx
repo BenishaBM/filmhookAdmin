@@ -263,6 +263,9 @@ const Userinfo = () => {
     }
   };
 
+  // console.log(userData);
+  
+
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
       <div className="flex flex-col md:flex-row gap-8">

@@ -892,23 +892,48 @@ const Report = () => {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
               <div className="bg-white rounded-lg w-11/12 max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
                 {/* Modal Header */}
-                <div className="flex justify-between items-center p-4 border-b bg-blue-gray-50">
-                  <Typography variant="h5" color="blue-gray">
+                <div className="flex justify-between items-center p-4 border-b bg-gradient-to-r from-blue-500 to-indigo-600 rounded-t-lg text-white">
+                {/* <div className="flex justify-between items-center p-4 border-b bg-blue-gray-50"> */}
+                  <Typography variant="h5" color="blue-gray text-white">
                     Post Details (ID: {selectedPost.postId})
                   </Typography>
-                  <IconButton
+                  {/* <IconButton
                     variant="text"
                     color="blue-gray"
                     onClick={handleClosePopup}
                   >
                     <XMarkIcon className="h-5 w-5" />
-                  </IconButton>
+                  </IconButton> */}
+                  <button
+                    onClick={handleClosePopup}
+                    // className="absolute top-8 right-6 z-10 px-4 py-2 bg-transparent text-white rounded-lg hover:bg-blue-700 transition flex items-center"
+                    className="z-10 w-12 h-12 bg-transparent text-white rounded-full hover:bg-blue-900 transition flex items-center justify-center"
+                  >
+                    <span className="hover:scale-125">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M6 18 18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </span>
+
+                    {/* Close */}
+                  </button>
                 </div>
 
                 {/* Modal Body */}
                 <div className="flex flex-col md:flex-row gap-8 overflow-hidden p-4">
                   {/* Image Carousel section */}
-                  <div className="w-full md:w-[45%] bg-white rounded-lg shadow-md p-4">
+                  <div className="w-full md:w-[45%] bg-white rounded-lg shadow-md hover:shadow-2xl p-4">
                     <Typography variant="h6" className="mb-4 text-center">
                       Post Images ({selectedPost.posts?.length || 0})
                     </Typography>
@@ -981,7 +1006,7 @@ const Report = () => {
                   </div>
 
                   {/* User details section */}
-                  <div className="w-full md:w-[55%] p-4 bg-blue-gray-50/30 overflow-y-auto rounded-lg shadow-md" style={{ maxHeight: "70vh" }}>
+                  <div className="w-full md:w-[55%] p-4 bg-blue-gray-50/30 overflow-y-auto rounded-lg shadow-md hover:shadow-2xl" style={{ maxHeight: "70vh" }}>
                     <Typography variant="h6" className="mb-4 text-center">
                       Reported By
                     </Typography>

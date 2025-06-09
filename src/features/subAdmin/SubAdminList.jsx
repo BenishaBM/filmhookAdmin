@@ -356,6 +356,8 @@ const SubAdminList = () => {
               </thead>
               <tbody>
                 {records.map((item, index) => {
+                  // console.log(item);
+                  
                   const isLast = index === records.length - 1;
                   const classes = isLast
                     ? "px-4 py-[0.05rem]"

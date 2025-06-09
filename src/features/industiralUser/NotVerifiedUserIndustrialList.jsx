@@ -266,15 +266,21 @@ const NotVerifiedUserIndustrialList = () => {
   return (
     <div className="flex items-center justify-center h-full w-full">
       <div className="h-full w-[95%]">
-        <Typography
+        {/* <Typography
           variant="h1"
           className="text-4xl font-bold text-blue-800 text-center my-6"
         >
           Un verified Industrial User
-        </Typography>
+        </Typography> */}
 
         <Card className="h-full w-full">
-          <CardHeader floated={false} shadow={false} className="rounded-none">
+          <CardHeader floated={false} shadow={false} className="rounded-none flex justify-between align-center">
+            <Typography
+              variant="h1"
+              className="text-4xl font-bold text-blue-800 text-center my-4"
+            >
+              Un verified Industrial User
+            </Typography>
             <div className="flex items-center justify-between gap-4 mb-4">
               <div className="w-full md:w-72">
                 <Input
@@ -282,6 +288,7 @@ const NotVerifiedUserIndustrialList = () => {
                   icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                   value={searchName}
                   onChange={handleSearch}
+                  className="pl-10 pr-4 py-2 border border-gray-300 focus:outline-hidden hover:border-blue-300 rounded-md text-sm"
                 />
               </div>
             </div>
