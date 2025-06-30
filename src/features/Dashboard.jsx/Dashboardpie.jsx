@@ -26,8 +26,9 @@ import UserTypeTable from './UserTypeTable'; // Component for user type filterin
 import PaymentStatusTable from './PaymentStatusTable'; // New component for payment status details
 import CanvasJSReact from '@canvasjs/react-stockcharts';
 //var CanvasJSStockChart = CanvasJSReact.CanvasJSStockChart;
-import React from "react";
+//import React from "react";
 import * as CanvasJSStockChart from "@canvasjs/stockcharts";
+import React, { useState, useEffect, useRef } from 'react'; // 
 
 const Dashboardpie = () => {
 
