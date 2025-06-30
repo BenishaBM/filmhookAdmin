@@ -27,8 +27,12 @@ import PaymentStatusTable from './PaymentStatusTable'; // New component for paym
 import CanvasJSReact from '@canvasjs/react-stockcharts';
 //var CanvasJSStockChart = CanvasJSReact.CanvasJSStockChart;
 //import React from "react";
-import * as CanvasJSStockChart from "@canvasjs/stockcharts";
+//import * as CanvasJSStockChart from "@canvasjs/stockcharts";
 import React, { useState, useEffect, useRef } from 'react'; // 
+//import CanvasJSReact from '@canvasjs/react-stockcharts';
+
+const CanvasJSStockChart = CanvasJSReact.CanvasJSStockChart;
+
 
 const Dashboardpie = () => {
 
