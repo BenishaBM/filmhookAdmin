@@ -185,7 +185,7 @@ const UnverfiedUserTable = ({ userId }) => {
             </div>
             <div className="mt-4 md:mt-0 md:ml-6 text-center md:text-left">
               <h1 className="text-2xl font-bold text-gray-800">
-                {unverifiedIndestiraluserDetails?.userInfo?.name || "User Profile"}
+                {unverifiedIndestiraluserDetails?.userInfo?.name || ""}
               </h1>
             
             </div>
