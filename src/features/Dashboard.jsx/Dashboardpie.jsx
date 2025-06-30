@@ -115,93 +115,6 @@ const Dashboardpie = () => {
     return token;
   };
 
-  // const fetchData = async () => {
-  //   if (!startDate || !endDate) {
-  //     return;
-  //   }
-
-  //   const token = getAuthToken();
-  //   if (!token) return;
-
-  //   setLoading(true);
-  //   setError(null);
-  //   setAuthError(false);
-
-  //   try {
-  //     const headers = {
-  //       'Authorization': `Bearer ${token}`,
-  //       'Content-Type': 'application/json'
-  //     };
-
-  //     // Fetch users data
-  //     // const usersResponse = await privateAPI.get(
-  //     //   `/admin/getAllUsersManagerCount?startDate=${startDate}&endDate=${endDate}`
-  //     // );
-  //     const usersResponse = await fetch(
-  //       `https://www.filmhooks.annulartech.net/admin/getAllUsersManagerCount?startDate=${startDate}&endDate=${endDate}`,
-  //       { headers }
-  //     );
-      
-  //     if (!usersResponse.ok) {
-  //       if (usersResponse.status === 401 || usersResponse.status === 403) {
-  //         throw new Error('Authentication failed. Please log in again.');
-  //       }
-  //       throw new Error(`Server responded with status: ${usersResponse.status}`);
-  //     }
-      
-  //     const usersData = await usersResponse.json();
-  //     // const usersData = usersResponse.data;
-      
-  //     // Fetch posts data
-  //     // const postsResponse = await privateAPI.get(
-  //     //   `/admin/getAllReportPostCount?startDate=${startDate}&endDate=${endDate}`
-  //     // );
-  //     const postsResponse = await fetch(
-  //       `https://www.filmhooks.annulartech.net/admin/getAllReportPostCount?startDate=${startDate}&endDate=${endDate}`,
-  //       { headers }
-  //     );
-      
-  //     if (!postsResponse.ok) {
-  //       throw new Error(`Server responded with status: ${postsResponse.status}`);
-  //     }
-      
-  //     const postsData = await postsResponse.json();
-  //     // const postsData = postsResponse.data;
-      
-  //     // Fetch payment data
-  //     // const paymentResponse = await privateAPI.get(
-  //     //   `/admin/getAllPaymentStatusCount?startDate=${startDate}&endDate=${endDate}`
-  //     // );
-  //     const paymentResponse = await fetch(
-  //       `https://www.filmhooks.annulartech.net/admin/getAllPaymentStatusCount?startDate=${startDate}&endDate=${endDate}`,
-  //       { headers }
-  //     );
-      
-  //     if (!paymentResponse.ok) {
-  //       throw new Error(`Server responded with status: ${paymentResponse.status}`);
-  //     }
-      
-  //     const paymentData = await paymentResponse.json();
-  //     // const paymentData = paymentResponse.data;
-
-  //     // Update state with fetched data
-  //     if (usersData.status === 1) setUserData(usersData.data);
-  //     if (postsData.status === 1) setPostData(postsData.data);
-  //     if (paymentData.status === 1) setPaymentData(paymentData.data);
-      
-  //   } catch (err) {
-  //     if (err.message.includes('Authentication failed')) {
-  //       setAuthError(true);
-  //       // Clear the invalid token
-  //       localStorage.removeItem('jwt');
-  //     }
-  //     setError(err.message || "Failed to fetch data. Please try again.");
-  //     console.error("API error:", err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const fetchData = async () => {
     if (!startDate || !endDate) return;
 
@@ -531,39 +444,7 @@ const containerProps = {
                 <CanvasJSStockChart containerProps={containerProps} options={options}/>
               </div>
 
-              {/* <div className="flex justify-center mt-4 flex-wrap gap-4">
-                <div className="flex items-center">
-                  <div className="w-4 h-4 bg-green-900 mr-2"></div>
-                  <span className="text-sm">Industry Users</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-4 h-4 bg-red-500 mr-2"></div>
-                  <span className="text-sm">Public Users</span>
-                </div>
-              </div> */}
-              {/* <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={formatLineChartData(userData)}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line 
-                    type="monotone" 
-                    dataKey="Industry Users" 
-                    stroke="#0088FE" 
-                    strokeWidth={2}
-                    dot={{ fill: '#0088FE' }}
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="Public Users" 
-                    stroke="#00C49F" 
-                    strokeWidth={2}
-                    dot={{ fill: '#00C49F' }}
-                  />
-                </LineChart>
-              </ResponsiveContainer> */}
+             
             </div>
             <div className="flex justify-center mt-4 flex-wrap gap-4">
                 <div className="flex items-center">
@@ -586,53 +467,7 @@ const containerProps = {
 
           </div>
 
-          {/* User Type Pie Chart */}
-          {/* <div className="bg-white p-4 rounded-lg shadow-md"> */}
-            {/* <h3 className="text-lg font-semibold mb-2 text-gray-800">User Types</h3>
-            <div className="text-sm text-gray-500 mb-4">
-              Distribution by User Type
-            </div>
-            
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={formatUserData(userData)}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                    onClick={handlePieClick}
-                    cursor="pointer"
-                  >
-                    {formatUserData(userData).map((entry, index) => (
-                      <Cell 
-                        key={`cell-${index}`} 
-                        fill={COLORS[index % COLORS.length]} 
-                        className="hover:opacity-80"
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </div> */}
-
-            {/* Color Legend for User Chart */}
-            {/* <div className="flex justify-center mt-4 flex-wrap gap-4">
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-blue-500 mr-2"></div>
-                <span className="text-sm">Industry Users</span>
-              </div>
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-green-500 mr-2"></div>
-                <span className="text-sm">Public Users</span>
-              </div>
-            </div> */}
-          {/* </div> */}
+       
 
           {/* Posts Data Chart */}
           <div className="bg-white p-4 rounded-lg shadow-md">
